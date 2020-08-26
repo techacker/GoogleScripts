@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------- RFQ Draft Email Creations Program ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.2.0           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.3.0           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Further Development Ideas & Change Log:
 // -----------1. Validate the Tracker by finding the header            ----- Completed 8/21/2020
@@ -13,6 +13,7 @@
 //------------8. Send REQ Emails to suppliers
 //------------9. Send PO Emails to suppliers
 //-----------10. Send Reminder emails to suppliers
+//-----------11. Create New Sheets based on Master Template            ----- Completed 8/26/2020
 
 
 // ********* Start: Main Function
@@ -257,7 +258,7 @@ function DraftEmails(){
 
 // ********* End: Draft Email Function
 
-/*
+
 function getSheetNames() {
   var App = SpreadsheetApp;
   var Sheet = App.getActiveSpreadsheet(); 
@@ -270,4 +271,4 @@ function getSheetNames() {
   
   return sheetNames;
 }
-*/
+
