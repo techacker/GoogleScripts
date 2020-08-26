@@ -10,5 +10,6 @@
       menu.addItem("Get Supplier Info","UpdateSupplierInfo");
       menu.addItem("Create RFQ Emails","createRFQEmails");
       menu.addItem("Update POs","UpdatePO");
+      menu.addItem("Create New Tracker File","copyMasterTemplate");
       menu.addToUi();
     }
