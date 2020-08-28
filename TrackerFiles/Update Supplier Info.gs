@@ -39,7 +39,7 @@ function UpdateSupplierInfo(){
   // Update Sales Manager Details in the tracker sheet.
   for (var i=0; i<lr-headerRow; i++) {
     for (var j=0; j<SalesManagersData.length; j++) {
-      if (SalesMngrEmails[i][0] === "" && SuppCodes[i][0] === SalesManagersData[j][0]) {
+      if (SuppCodes[i][0] !== "" && SalesMngrEmails[i][0] === "" && SuppCodes[i][0] === SalesManagersData[j][0]) {
         ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(SalesManagersData[j][2]);
         ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(SalesManagersData[j][4] + " " + SalesManagersData[j][5]);
         ss.getRange(i + (headerRow + 1), SEmailInd, 1, 1).setValue(SalesManagersData[j][8]);
