@@ -56,7 +56,7 @@ function getHeaderRow(sheet, searchKey) {
   
   // If "Event Title" is not found, show an error message.
   if (headerRow === undefined) {
-    Browser.msgBox("ERROR", "Can't find a header row with 'Event Title'.", Browser.Buttons.OK);
+    Browser.msgBox("ERROR", "Can't find a header row with " + searchKey + ".", Browser.Buttons.OK);
     return null;
   }
   
