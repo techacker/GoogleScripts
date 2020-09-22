@@ -1,21 +1,24 @@
 // ------------------------------------------------------------------------- RFQ Draft Email Creations Program ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.4.0           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.7.0           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Further Development Ideas & Change Log:
-// -----------1. Validate the Tracker by finding the header            ----- Completed 8/21/2020
-// -----------2. Update Status on Summary Sheet                        ----- Completed 8/25/2020
-// -----------3. Update Supplier Info from a Master Sheet              ----- Completed 8/26/2020
-//------------4. Update PO information from a Master Sheet             ----- Completed 8/25/2020
-//------------5. Auto Create RFQ Forms
+// -----------1. Validate the Tracker by finding the header            ----- Completed 08/21/2020
+// -----------2. Update Status on Summary Sheet                        ----- Completed 08/25/2020
+// -----------3. Update Supplier Info from a Master Sheet              ----- Completed 08/26/2020
+//------------4. Update PO information from a Master Sheet             ----- Completed 08/25/2020
+//------------5. Auto Create RFQ Forms                                 ----- Completed 09/09/2020
 //------------6. Save RFQ forms in a Drive Folder with Program Name
 //------------7. Update GMail draft to include developed RFQ Forms
 //------------8. Send REQ Emails to suppliers
 //------------9. Send PO Emails to suppliers
 //-----------10. Send Reminder emails to suppliers
-//-----------11. Create New Sheets based on Master Template            ----- Completed 8/26/2020
-//-----------12. Add new row with New Sheet Name in Summary Sheet      ----- Completed 8/27/2020
+//-----------11. Create New Sheets based on Master Template File       ----- Completed 09/10/2020
+//-----------12. Add new row with New Sheet Name in Summary Sheet      ----- Completed 08/27/2020
 //-----------13. Update Master Supplier Info from Trackers
+//-----------14. Create Library for userbase                           ----- Completed 09/02/2020
+
+
 
 
 // ********* Start: Main Function
@@ -76,7 +79,7 @@ function checkTemplate() {
   // Header Columns in Template:
   // ['Status',	'Supplier Code', 'Company Name', 'Supplier Contact', 'Sales Manager Email', 'Engg Manager Email', 'Phone  - Sales Manager', 
   // 'PR/PC/RE', 'VSC:', 'Part Number', 'C/L', 'Part Description', '"Line Up Code"', 'Quantity Ordered', 'Ship To Location', 
-  // 'Purchase Requisition #', 'PO # ', 'Part MRD', 'Supplier Promise Date', 'PO Issue Date', '"PARTS RECEIVED Y/ Blank"', '"PSAP GR Y/ Blank"', 'Special Means', '"Quoted Piece Cost"',
+  // 'Purchase Requisition #', 'PO # ', 'Part MRD', 'Supplier Promise Date', 'PO Issue Date', 'PARTS RECEIVED', 'GOODS RECEIPT', 'Special Means', '"Quoted Piece Cost"',
   // 'Misc. Costs (ie, Shipping, Set-up)', 'Tooling Cost', '"Production Piece"', 'Total REQ Cost', 'COMMENTS']
   
   var lookupValues = ["Supplier Code",
@@ -93,7 +96,9 @@ function checkTemplate() {
                       "PO # ", 
                       "PO Issue Date", 
                       "Phone  - Sales Manager", 
-                      "Supplier Contact"]; 
+                      "Supplier Contact", 
+                      "PARTS RECEIVED", 
+                      "GOODS RECEIPT"]; 
   
   var lookupInd = [];
   var header = ss.getRange(headerRow, 1, 1, lc).getValues()[0];   
@@ -130,17 +135,6 @@ function DraftEmails(){
   var lr = ss.getLastRow();
   var lc = ss.getLastColumn();
   var headerRow = checkTemplate()[0];
-  
-  var lookupValues = ["Supplier Code",
-                      "Company Name",
-                      "Sales Manager Email",
-                      "Engg Manager Email",
-                      "Part Number",
-                      "Part Description",
-                      "Quantity Ordered",
-                      "Ship To Location",
-                      "Part MRD", 
-                      "Status"]; 
   
   var header = ss.getRange(headerRow, 1, 1, lc).getValues()[0];
   var range = ss.getRange(headerRow + 1, 1, lr-headerRow, lc).getValues()[0];
@@ -212,7 +206,7 @@ function DraftEmails(){
   // Loop through the parts list and match with unique supplier codes to draft their emails
   
   for (var j=0; j<uniqueSupplierCodes.length; j++) {
-    for (var i=0; i<lr-6; i++) {
+    for (var i=0; i<lr-headerRow; i++) {
       if (SCodes[i][0] === uniqueSupplierCodes[j] && SEmail[i][0] !== "" && Status[i][0] === "") {
         var reqdDate = mrd[i][0];
         var shipAddress = Ship[i][0];
@@ -224,7 +218,7 @@ function DraftEmails(){
         PartDetails.push(PN[i][0] + " - " + PDesc[i][0] + " - Qty: " + Qty[i][0]);
         
         // Update Status Column to say 'RFQ SENT'
-        ss.getRange(i+headerRow+1, StatusInd).setValue("RFQ SENT");
+        ss.getRange(i+headerRow+1, StatusInd).setValue("RFQ SENT").setBackground("Indigo").setFontColor("White");
         Status.splice(i, 1,"RFQ SENT");
       };
     };
