@@ -1,11 +1,11 @@
-function createNewEventTracker() {
-  PPPMWorkloadGS.createNewEventTracker();
+function createNewEventsTracker() {
+  PPPMWorkloadGS.getNewTrackerURL();
 }
 
 function getNewTrackerURL() {
   PPPMWorkloadGS.getNewTrackerURL();
 }
 
-function createNewEventTracker() {
-  PPPMWorkloadGS.createNewEventTracker();
+function updateTrackerTab() {
+  PPPMWorkloadGS.updateTrackerTab();
 }
