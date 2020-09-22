@@ -7,9 +7,21 @@
     function createMenu() {  
       const ui = SpreadsheetApp.getUi();
       const menu = ui.createMenu("Simplify");
-      menu.addItem("Get Supplier Info","UpdateSupplierInfo");
-      menu.addItem("Create RFQ Emails","createRFQEmails");
-      menu.addItem("Update POs","UpdatePO");
+      
+      // Create Submenu
+      var submenu = ui.createMenu("Fetch Info");
+      submenu.addItem("Get Supplier Info","UpdateSupplierInfo");
+      submenu.addItem("Get PO Details","UpdatePO");
+      submenu.addItem("Update Program Status","updateStatusColumn");
+      menu.addSubMenu(submenu);
+      menu.addSeparator();
+      
+      // Add other items to menu
       menu.addItem("Create New Tracker Sheet","addNewRowInSummarySheet");
+      menu.addItem("Generate RFQ Emails","createRFQEmails");
+      menu.addItem("Generate RFQ Forms","createRFQForms");
+      
+      
+      // Add Menu to UI
       menu.addToUi();
     }
