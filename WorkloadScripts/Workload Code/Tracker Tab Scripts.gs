@@ -1,13 +1,16 @@
-function createNewEventTracker() {
+function updateTrackerTab() {
   
   //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
   var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
   var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
   var lr = EventSheet.getLastRow();
   var lc = EventSheet.getLastColumn();
+  
   var headerRow = getHeaderRow(EventSheet, "Tracker URL");
+  
   var colIndices = getColIndex();
   var urlColInd = colIndices[11];
+  
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, lr-headerRow, 1).getValues();
   
   // Get the tracker URL from Events Tab
