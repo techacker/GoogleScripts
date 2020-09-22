@@ -32,14 +32,21 @@ function UpdateSupplierInfo(){
   var SalesMngrEmails = ss.getRange(headerRow+1, SEmailInd, lr, 1).getDisplayValues();
   var EnggMngrEmails = ss.getRange(headerRow+1, AEmailInd, lr, 1).getDisplayValues();
   
+  var uniqueSupplierCodes = [];
+  
+  for (i=0; i < SuppCodes.length; i++) {
+    if (uniqueSupplierCodes.indexOf(SuppCodes[i][0].trim()) === -1.0 && SuppCodes[i][0].trim() !== "") {
+      uniqueSupplierCodes.push(SuppCodes[i][0].trim());
+    };
+  };
+  
   // Logger.log(SalesManagersData[0]) &  Logger.log(EnggManagersData[0]) returns ->
   // [Supplier Code, Region/Sector, Supplier Name, Role Name, Contact First Name, Contact Last Name, Phone, Mobile, Email, Created Date, Created By, Updated Date, Updated By]
- 
   
   // Update Sales Manager Details in the tracker sheet.
   for (var i=0; i<lr-headerRow; i++) {
     for (var j=0; j<SalesManagersData.length; j++) {
-      if (SuppCodes[i][0] !== "" && SalesMngrEmails[i][0] === "" && SuppCodes[i][0] === SalesManagersData[j][0]) {
+      if (SuppCodes[i][0].trim() !== "" && SalesMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === SalesManagersData[j][0]) {
         ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(SalesManagersData[j][2]);
         ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(SalesManagersData[j][4] + " " + SalesManagersData[j][5]);
         ss.getRange(i + (headerRow + 1), SEmailInd, 1, 1).setValue(SalesManagersData[j][8]);
@@ -53,7 +60,7 @@ function UpdateSupplierInfo(){
   for (var i=0; i<lr-headerRow; i++) {
     for (var j=0; j<EnggManagersData.length; j++) {
       // Only if Company Names was not detected in above Sales Mangers lookup
-      if (SalesMngrEmails[i][0] === "" && EnggMngrEmails[i][0] === "" && SuppCodes[i][0] === EnggManagersData[j][0]) {
+      if (SalesMngrEmails[i][0] === "" && EnggMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === EnggManagersData[j][0]) {
         ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(EnggManagersData[j][2]);
         //ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(EnggManagersData[j][4] + " " + EnggManagersData[j][5]);
         ss.getRange(i + (headerRow + 1), AEmailInd, 1, 1).setValue(EnggManagersData[j][8]);
@@ -64,7 +71,9 @@ function UpdateSupplierInfo(){
     };
   };
   
-  Browser.msgBox("Supplier Info has been updated in the current sheet based on the data from GYPSIS!");
+  //Browser.msgBox("Supplier Info has been updated in the current sheet based on the data from GYPSIS!");
+  
+  return uniqueSupplierCodes;
   
 }; 
 
