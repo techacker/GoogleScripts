@@ -8,9 +8,9 @@
       const ui = SpreadsheetApp.getUi();
       const menu = ui.createMenu("PPPM Tools");
       menu.addItem("Add Event","loadNewForm");
-      menu.addItem("Create New Events Tracker","createNewEventTracker");
+      menu.addItem("Create New Events Tracker","getNewTrackerURL");
       menu.addItem("Manage Trackers","getNewTrackerURL");
-      menu.addItem("Update Events Data","createNewEventTracker");
+      menu.addItem("Refresh Event Status","updateTrackerTab");
       menu.addToUi();  
     }
 
