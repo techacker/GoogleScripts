@@ -23,23 +23,24 @@ function UpdatePO(){
   var POs = getPOfromMasterPPPMREQFile();
   
   // Update POs in the tracker sheet with REQ Nos.
-  for (var i=0; i<lr-headerRow; i++) {
+  for (var i=0; i<REQNum.length; i++) {
     for (var j=0; j<POs.length; j++) {
-      if (REQNum[i][0] === POs[j][0]) {
+      if (REQNum[i][0] === POs[j][0] && POs[j][1] !== "") {
         // If no PO has been issued - Status = "Pending"
-        if (POs[j][1] === "") {
-          ss.getRange(i + (headerRow + 1), PONumInd, 1, 1).setValue("Pending");
-          ss.getRange(i + (headerRow + 1), POIssueDate, 1, 1).setValue("Waiting");
-        } 
+        //if (POs[j][1] !== "") {
+        //ss.getRange(i + (headerRow + 1), PONumInd, 1, 1).setValue("Pending");
+        //ss.getRange(i + (headerRow + 1), POIssueDate, 1, 1).setValue("Waiting");
+        //}
         // If PO is issued, update PO details
-        else {
-          ss.getRange(i + (headerRow + 1), PONumInd, 1, 1).setValue(POs[j][1]);
-          ss.getRange(i + (headerRow + 1), POIssueDate, 1, 1).setValue(POs[j][2]);
-        };
+        //else {
+        ss.getRange(i + (headerRow + 1), PONumInd, 1, 1).setValue(POs[j][1]);
+        ss.getRange(i + (headerRow + 1), POIssueDate, 1, 1).setValue(POs[j][2]);
+        //};
       };
     };
   };
   
+  updateStatusColumn();
   Browser.msgBox("All POs released to the suppliers are updated in the current sheet!");
   
 }; 
@@ -73,11 +74,11 @@ function GetReqNo(){
   
   // Get the array of values for these indexes
   
-  var REQNum = ss.getRange(headerRow+1, REQInd, lr, 1).getDisplayValues();
-  var PO = ss.getRange(headerRow+1, PONumInd, lr, 1).getDisplayValues();
+  var REQNum = ss.getRange(headerRow+1, REQInd, lr-headerRow, 1).getDisplayValues();
+  var PO = ss.getRange(headerRow+1, PONumInd, lr-headerRow, 1).getDisplayValues();
   
-  for (var i=0; i<range.length; i++) {
-    if (REQNum[i][0].length >= 6 && (PO[i][0] !== "Pending" || PO[i][0] !== "Processing")) {
+  for (var i=0; i<REQNum.length; i++) {
+    if (REQNum[i][0].length >= 6) {
       REQs.push(REQNum[i][0]);
     };
   };
