@@ -27,8 +27,9 @@ function parseURL(url) {
 function getTrackerURL(VehFamFileNames, EventTitle) {
   
   for (var i=0; i<VehFamFileNames.length; i++) {
-    if (VehFamFileNames[i] === EventTitle) {
-      var tracker = DriveApp.getFilesByName(EventTitle).next();
+    var fileName = EventTitle + " Tracker"
+    if (VehFamFileNames[i] === fileName) {
+      var tracker = DriveApp.getFilesByName(fileName).next();
       var url = tracker.getUrl();
       var link = parseURL(url);
       return url;
