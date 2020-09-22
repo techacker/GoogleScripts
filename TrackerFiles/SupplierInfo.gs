@@ -16,14 +16,34 @@ function getMasterSupplierData() {
     
   var sheetNames = Object.keys(sheets);
   var sheetIDs = Object.values(sheets);
-  var SupplierData = [];
+  var SupplierDataDump = [];
+  //var SupplierData = [];
   
   // Store Supplier Info from all the sheets into Array
+  
+  // Get Sales Managers Data
+  var SalesManagerSheet = masterSuppFile.getSheetByName(sheetNames[0]);
+  var SalesLR = SalesManagerSheet.getLastRow();
+  var SalesLC = SalesManagerSheet.getLastColumn();
+  var SalesManagerData = SalesManagerSheet.getRange(2, 1, SalesLR, SalesLC).getDisplayValues();
+  
+  // Get Engg Managers Data
+  var EnggManagerSheet = masterSuppFile.getSheetByName(sheetNames[1]);
+  var EnggLR = EnggManagerSheet.getLastRow();
+  var EnggLC = EnggManagerSheet.getLastColumn();
+  var EnggManagerData = EnggManagerSheet.getRange(2, 1, EnggLR, EnggLC).getDisplayValues();
+  
+  
   for (let i= 0; i<sheetNames.length; i++) {
-    SupplierData.push(masterSuppFile.getSheetByName(sheetNames[i]).getDataRange().getValues());
+     
+    SupplierDataDump.push(masterSuppFile.getSheetByName(sheetNames[i]).getDataRange().getValues());
   };
   
-  return SupplierData;  
+  //SupplierData.push([SalesManagerData, EnggManagerData]);
+  
+  //Logger.log(SupplierData);
+  
+  return [SalesManagerData, EnggManagerData];  
   
 }
 
