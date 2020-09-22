@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.0.2           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.0.3           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
@@ -113,8 +113,9 @@ function createNewTracker(VehFam, EventTitle) {
     VehFamFileNames.push(VehFamFileName);
   }
   
+  
   // Create a new tracker inside if it doesn't exist
-  if (VehFamFileNames.indexOf(EventTitle) === -1) {
+  if (VehFamFileNames.indexOf(EventTitle + " Tracker") === -1) {
     var newTracker = DriveApp.getFileById(TemplateFileID).makeCopy(EventTitle + " Tracker", VehFamFolder);
     var url = newTracker.getUrl();
     var link = parseURL(url);
