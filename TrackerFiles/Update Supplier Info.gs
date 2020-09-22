@@ -20,6 +20,7 @@ function UpdateSupplierInfo(){
   // Logger.log(indices);
   // [1.0, 2.0, 4.0, 5.0, 9.0, 11.0, 13.0, 14.0, 17.0, 0.0, 15.0, 16.0, 19.0, 6.0]
   
+  
   var SCodeInd = indices[0]+1;
   var CompInd = indices[1]+1;
   var SEmailInd = indices[2]+1;
@@ -34,23 +35,48 @@ function UpdateSupplierInfo(){
   
   var uniqueSupplierCodes = [];
   
-  for (i=0; i < SuppCodes.length; i++) {
+  for (var i=0; i < SuppCodes.length; i++) {
     if (uniqueSupplierCodes.indexOf(SuppCodes[i][0].trim()) === -1.0 && SuppCodes[i][0].trim() !== "") {
       uniqueSupplierCodes.push(SuppCodes[i][0].trim());
     };
   };
   
-  // Logger.log(SalesManagersData[0]) &  Logger.log(EnggManagersData[0]) returns ->
-  // [Supplier Code, Region/Sector, Supplier Name, Role Name, Contact First Name, Contact Last Name, Phone, Mobile, Email, Created Date, Created By, Updated Date, Updated By]
+  // Collect Sales Managers info for Unique Supplier Codes
+  var SalesManagers = [];
+  for (var i=0; i<uniqueSupplierCodes.length; i++) {
+    for (var j=0; j<SalesManagersData.length; j++) {
+      if (uniqueSupplierCodes[i] === SalesManagersData[j][0].toString()) {
+        SalesManagers.push([SalesManagersData[j][0].toString(), SalesManagersData[j][2],SalesManagersData[j][4] + " " + SalesManagersData[j][5],
+                           SalesManagersData[j][8], SalesManagersData[j][6]]);
+      }
+    }
+  }
+  
+  // Collect Engg Managers info for Unique Supplier Codes
+  var EnggManagers = [];
+  for (var i=0; i<uniqueSupplierCodes.length; i++) {
+    for (var j=0; j<EnggManagersData.length; j++) {
+      if (uniqueSupplierCodes[i] === EnggManagersData[j][0].toString()) {
+        EnggManagers.push([EnggManagersData[j][0].toString(), EnggManagersData[j][2],EnggManagersData[j][4] + " " + EnggManagersData[j][5],
+                           EnggManagersData[j][8], EnggManagersData[j][6]]);
+      }
+    }
+  }
+  
+  // [[12624, LS Automotive Technologies Wuxi Cor, HS Park, hsparkwuxi@lsautomotive.com, 704467752], 
+  //  [28242, Bitron De Mexico SA DE CV, Juan Chavez, juan.chavez@bitron.com.mx, 4421011600], 
+  //  [28242, Bitron De Mexico SA DE CV, Noemi Rodriguez, noemi.rodriguez@mex.bitron-ind.com, 4421011614-1614], 
+  //  [59305 B, TA YIH INDUSTRIAL CO LTD, CHIN-WEN CHEN, jchen@tayih-ind.com.tw, 88662615151-278]] 
+  
   
   // Update Sales Manager Details in the tracker sheet.
   for (var i=0; i<lr-headerRow; i++) {
-    for (var j=0; j<SalesManagersData.length; j++) {
-      if (SuppCodes[i][0].trim() !== "" && SalesMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === SalesManagersData[j][0]) {
-        ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(SalesManagersData[j][2]);
-        ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(SalesManagersData[j][4] + " " + SalesManagersData[j][5]);
-        ss.getRange(i + (headerRow + 1), SEmailInd, 1, 1).setValue(SalesManagersData[j][8]);
-        ss.getRange(i + (headerRow + 1), PhoneInd, 1, 1).setValue(SalesManagersData[j][6]);
+    for (var j=0; j<SalesManagers.length; j++) {
+      if (SuppCodes[i][0].trim() !== "" && SalesMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === SalesManagers[j][0]) {
+        ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(SalesManagers[j][1]);
+        ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(SalesManagers[j][2]);
+        ss.getRange(i + (headerRow + 1), SEmailInd, 1, 1).setValue(SalesManagers[j][3]);
+        ss.getRange(i + (headerRow + 1), PhoneInd, 1, 1).setValue(SalesManagers[j][4]);
       };
     };
   };
@@ -58,16 +84,19 @@ function UpdateSupplierInfo(){
   
   // Update Engg Manager Details in the tracker sheet.
   for (var i=0; i<lr-headerRow; i++) {
-    for (var j=0; j<EnggManagersData.length; j++) {
+    for (var j=0; j<EnggManagers.length; j++) {
       // Only if Company Names was not detected in above Sales Mangers lookup
-      if (SalesMngrEmails[i][0] === "" && EnggMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === EnggManagersData[j][0]) {
-        ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(EnggManagersData[j][2]);
-        //ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(EnggManagersData[j][4] + " " + EnggManagersData[j][5]);
-        ss.getRange(i + (headerRow + 1), AEmailInd, 1, 1).setValue(EnggManagersData[j][8]);
-        //ss.getRange(i + (headerRow + 1), PhoneInd, 1, 1).setValue(EnggManagersData[j][6]);
-      } else if (SuppCodes[i][0] === EnggManagersData[j][0]) {
-        ss.getRange(i + (headerRow + 1), AEmailInd, 1, 1).setValue(EnggManagersData[j][8]);
-      }; 
+      if (SalesMngrEmails[i][0] === "" && EnggMngrEmails[i][0] === "" && SuppCodes[i][0].trim() === EnggManagers[j][0].toString()) {
+        ss.getRange(i + (headerRow + 1), CompInd, 1, 1).setValue(EnggManagers[j][1]);
+        ss.getRange(i + (headerRow + 1), SuppNameInd, 1, 1).setValue(EnggManagers[j][2]);
+        ss.getRange(i + (headerRow + 1), AEmailInd, 1, 1).setValue(EnggManagers[j][3]);
+        ss.getRange(i + (headerRow + 1), PhoneInd, 1, 1).setValue(EnggManagers[j][4]);
+      } 
+      /*
+      else if (SuppCodes[i][0] === EnggManagers[j][0]) {
+        ss.getRange(i + (headerRow + 1), AEmailInd, 1, 1).setValue(EnggManagers[j][3]);
+      };
+      */
     };
   };
   
