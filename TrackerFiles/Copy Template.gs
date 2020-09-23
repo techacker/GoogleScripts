@@ -22,28 +22,22 @@ function addNewRowInSummarySheet() {
   var formulas = summarySheet.getRange(TabRowNum+1, 2, 1, lc).getFormulas();
 
   // Logger.log(formulas);
-  // [[=MASTER!H1, =MASTER!H2, =MASTER!P1, 
-  // =IFERROR(J9/D9,0), =IFERROR(K9/D9,0), =IFERROR(L9/D9,0), =IFERROR(M9/D9,0), 
-  // =MASTER!AD1, =MASTER!Q1, =MASTER!R1, =MASTER!S1, =MASTER!U1, ]]
-  
+  // [[=MASTER!A2, =MASTER!A3, =MASTER!P1, =MASTER!Q3, =MASTER!R3, =MASTER!S3, =MASTER!AD1, 
+  //   =MASTER!T3, =MASTER!Q1, =MASTER!R1, =MASTER!S1, =MASTER!T1, =MASTER!U1, =MASTER!V1, 
+  //   =MASTER!W1, =MASTER!X1, =MASTER!U3, =MASTER!V3, =MASTER!W3, =MASTER!X3, ]]
   
   if (newSheetName.length !== 0) {
     // Shift one row down
     MasterRow.insertCells(SpreadsheetApp.Dimension.ROWS);
-    var Tab = summarySheet.getRange(TabRowNum+1, 1).setValue(newSheetName);
-    var PPPMEngr = summarySheet.getRange(TabRowNum+1, 2).setValue(`=${newSheetName}!H1`);
-    var MRD = summarySheet.getRange(TabRowNum+1, 3).setValue(`=${newSheetName}!H2`);
-    var NoOfParts = summarySheet.getRange(TabRowNum+1, 4).setValue(`=${newSheetName}!P1`);
-    var Cost = summarySheet.getRange(TabRowNum+1, 9).setValue(`=${newSheetName}!AD1`);
-    var REQSubmitted = summarySheet.getRange(TabRowNum+1, 10).setValue(`=${newSheetName}!Q1`);
-    var POIssued = summarySheet.getRange(TabRowNum+1, 11).setValue(`=${newSheetName}!R1`);
-    var PartsReceived = summarySheet.getRange(TabRowNum+1, 12).setValue(`=${newSheetName}!S1`);
-    var RFQPending = summarySheet.getRange(TabRowNum+1, 13).setValue(`=${newSheetName}!U1`);
-    var PercREQ = summarySheet.getRange(TabRowNum+1, 5).setValue(`=IFERROR(J9/D9,0)`);
-    var PercPO = summarySheet.getRange(TabRowNum+1, 6).setValue(`=IFERROR(K9/D9,0)`);
-    var PercRecd = summarySheet.getRange(TabRowNum+1, 7).setValue(`=IFERROR(L9/D9,0)`);
-    var PercRFQPending = summarySheet.getRange(TabRowNum+1, 8).setValue(`=IFERROR(M9/D9,0)`);
     
+    // Set first cell value to be the sheet name
+    var Tab = summarySheet.getRange(TabRowNum+1, 1).setValue(newSheetName);
+    
+    // Set formulas for other cells in this new row.
+    for (var i=0; i<formulas[0].length-1; i++) {
+      var splits = formulas[0][i].split('!');  // Since formula is referenced with '!'
+      summarySheet.getRange(TabRowNum+1, i+2).setValue(`=${newSheetName}!${splits[1]}`);
+    };
   };
   
   // Hide the Master Row to avoid confusion.
@@ -55,6 +49,36 @@ function addNewRowInSummarySheet() {
     }
   }
   
+  // PPPM Engineer	MRD	Total # of Parts	% REQ	% PO	% Received	Cost	% Cancelled	
+  // # REQ Submitted	# PO Issued	# Parts Received	# Cancelled	# On Time	# Exception	
+  // # Late	# Not Defined	% On Time	% Exception	% Late	% Not Defined
+  
+  /*
+  //*********************************************************** Use this code if the formulas are not all the same. **************************
+  if (newSheetName.length !== 0) {
+    // Shift one row down
+    MasterRow.insertCells(SpreadsheetApp.Dimension.ROWS);
+    var Tab = summarySheet.getRange(TabRowNum+1, 1).setValue(newSheetName);
+    
+    var PPPMEngr = summarySheet.getRange(TabRowNum+1, 2).setValue(`=${newSheetName}!A2`);
+    var MRD = summarySheet.getRange(TabRowNum+1, 3).setValue(`=${newSheetName}!A3`);
+    
+    var NoOfParts = summarySheet.getRange(TabRowNum+1, 4).setValue(`=${newSheetName}!P1`);
+    var PercREQ = summarySheet.getRange(TabRowNum+1, 5).setValue(`=${newSheetName}!Q3`);
+    var PercPO = summarySheet.getRange(TabRowNum+1, 6).setValue(`=${newSheetName}!R3`);
+    var PercRecd = summarySheet.getRange(TabRowNum+1, 7).setValue(`=${newSheetName}!S3`);
+    var Cost = summarySheet.getRange(TabRowNum+1, 9).setValue(`=${newSheetName}!AD1`);
+    
+    var PercCancelled = summarySheet.getRange(TabRowNum+1, 9).setValue(`=${newSheetName}!AD1`);
+    var REQSubmitted = summarySheet.getRange(TabRowNum+1, 10).setValue(`=${newSheetName}!Q1`);
+    var POIssued = summarySheet.getRange(TabRowNum+1, 11).setValue(`=${newSheetName}!R1`);
+    var PartsReceived = summarySheet.getRange(TabRowNum+1, 12).setValue(`=${newSheetName}!S1`);
+    var RFQPending = summarySheet.getRange(TabRowNum+1, 13).setValue(`=${newSheetName}!U1`);
+    
+    var PercRFQPending = summarySheet.getRange(TabRowNum+1, 8).setValue(`=IFERROR(M9/D9,0)`);
+    
+  };
+  */ //*********************************************************** Use this code if the formulas are not all the same. **************************
   
 }
 
