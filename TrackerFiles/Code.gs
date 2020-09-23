@@ -1,11 +1,11 @@
 // ------------------------------------------------------------------------- RFQ Draft Email Creations Program ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.7.0           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.7.5           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Further Development Ideas & Change Log:
 // -----------1. Validate the Tracker by finding the header            ----- Completed 08/21/2020
 // -----------2. Update Status on Summary Sheet                        ----- Completed 08/25/2020
-// -----------3. Update Supplier Info from a Master Sheet              ----- Completed 08/26/2020
+// -----------3. Update Supplier Info from a Master Sheet              ----- Completed 09/22/2020
 //------------4. Update PO information from a Master Sheet             ----- Completed 08/25/2020
 //------------5. Auto Create RFQ Forms                                 ----- Completed 09/09/2020
 //------------6. Save RFQ forms in a Drive Folder with Program Name
@@ -17,6 +17,8 @@
 //-----------12. Add new row with New Sheet Name in Summary Sheet      ----- Completed 08/27/2020
 //-----------13. Update Master Supplier Info from Trackers
 //-----------14. Create Library for userbase                           ----- Completed 09/02/2020
+//-----------15. Updated Summary Sheet formula to reference cells      ----- Completed 09/23/2020
+
 
 
 
@@ -169,7 +171,7 @@ function DraftEmails(){
   
   //Constant Info
   
-  var Prog = ss.getRange(1, 12).getValue();
+  var Prog = ss.getRange(1, 1).getValue();
   
   // Get all the unique supplier codes
   
