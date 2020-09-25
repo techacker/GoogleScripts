@@ -49,6 +49,12 @@ function addNewRowInSummarySheet() {
     }
   }
   
+  var sheetNames = getSheetNames();
+  
+  if (sheetNames.includes("MASTER")) {
+    ss.getSheetByName("MASTER").hideSheet();
+  }
+  
   // PPPM Engineer	MRD	Total # of Parts	% REQ	% PO	% Received	Cost	% Cancelled	
   // # REQ Submitted	# PO Issued	# Parts Received	# Cancelled	# On Time	# Exception	
   // # Late	# Not Defined	% On Time	% Exception	% Late	% Not Defined
