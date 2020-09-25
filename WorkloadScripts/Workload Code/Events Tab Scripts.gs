@@ -1,12 +1,13 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.0.3           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.1.0           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
 // -----------Update Event URL in the Events Tab                                  ----- Completed 09/14/2020
 // -----------Update Trackers Basic Event Info section from Events Tab            ----- Completed 09/17/2020
 // -----------Get Event Tabs information from Trackers and update Tracker Tab     ----- Completed 09/21/2020
+// -----------Updated Tracker Tab Template and corresponding code                 ----- Completed 09/24/2020
 
 
 //----------------------Start : Function to update tracker url field in Event Sheet
