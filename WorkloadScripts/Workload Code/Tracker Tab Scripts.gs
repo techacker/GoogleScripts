@@ -8,15 +8,18 @@ function updateTrackerTab() {
   
   var headerRow = getHeaderRow(EventSheet, "Tracker URL");
   
+  // Get col indexes from Events Sheet
   var colIndices = getColIndex();
+  var VFInd = colIndices[0];
   var EventTitleInd = colIndices[1];
   var EventStatusInd = colIndices[3];
   var ProgMgrInd = colIndices[4];
   var urlColInd = colIndices[11];
   
+  
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, lr-headerRow, 1).getValues();  
   var BasicEventInfo = [];
-  var EventTitle, ProgMgr, EventStatus;
+  var EventTitle, ProgMgr, EventStatus, VF, DaystoMRD;
   var SummarySheet, sslc, sslr, SummaryRange, ssheaderRow, eventTabsData;
   
   // Get the tracker URL from Events Tab
@@ -26,6 +29,7 @@ function updateTrackerTab() {
       EventTitle = EventSheet.getRange(i + headerRow+1, EventTitleInd+1, 1, 1).getValue();
       ProgMgr = EventSheet.getRange(i + headerRow+1, ProgMgrInd+1, 1, 1).getValue();
       EventStatus = EventSheet.getRange(i+ headerRow+1, EventStatusInd+1, 1, 1).getValue();
+      VF = EventSheet.getRange(i+ headerRow+1, VFInd+1, 1, 1).getValue();
       
       // Get Information from Event Tracker's Summary Tab
       
@@ -40,20 +44,21 @@ function updateTrackerTab() {
       var infoCol = 3;
       var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
       
+      
       //addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
       
-      if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "") {
-        addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "" || eventInfoData[0][1] !== "" || eventInfoData[0][2] !== "" 
+          || eventInfoData[0][3] !== "" || eventInfoData[0][4] !== "" || eventInfoData[0][5] !== "" || eventInfoData[0][6] !== "") {
+        addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
         updateEventsData(eventInfoData[0][0], eventTabsData);
       }
-      
     }
   } 
   
 }
 
 
-function addEventTitles(EventTitle, ProgManager, EventStatus, eventInfoData, eventTabsData) {
+function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoData, eventTabsData) {
   
   //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
   var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
@@ -80,6 +85,8 @@ function addEventTitles(EventTitle, ProgManager, EventStatus, eventInfoData, eve
   var PrgMgrCol = TrackerTabColIndices[1];
   var EventStatusCol = TrackerTabColIndices[2];
   var TabCol = TrackerTabColIndices[3];
+  var VFCol = TrackerTabColIndices[28];
+  var DaystoMRDCol = TrackerTabColIndices[29];
   
   // Get Event Titles from Workload file
   var TrackerTabEventTitles = [];
@@ -148,6 +155,7 @@ function addEventTitles(EventTitle, ProgManager, EventStatus, eventInfoData, eve
     //Logger.log("Inside if", headerRow+1, EventTitle, ProgManager, EventStatus);
     var addRow = TrackerDataTab.getRange(headerRow+1, 1, 1,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
     TrackerDataTab.getRange(headerRow+1, EventTileCol+1, 1,1).setValue(EventTitle);
+    TrackerDataTab.getRange(headerRow+1, VFCol+1, 1,1).setValue(VehFam);
     TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, 1,1).setValue(ProgManager);
     TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, 1,1).setValue(EventStatus);
   }
@@ -155,6 +163,7 @@ function addEventTitles(EventTitle, ProgManager, EventStatus, eventInfoData, eve
     //Logger.log("Inside 1st else if", tabCount, EventTitle, ProgManager, EventStatus);
     var addRow = TrackerDataTab.getRange(headerRow+1, 1, tabCount,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
     TrackerDataTab.getRange(headerRow+1, EventTileCol+1, tabCount,1).setValue(EventTitle);
+    TrackerDataTab.getRange(headerRow+1, VFCol+1, tabCount,1).setValue(VehFam);
     TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, tabCount,1).setValue(ProgManager);
     TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, tabCount,1).setValue(EventStatus);
   }
@@ -162,6 +171,7 @@ function addEventTitles(EventTitle, ProgManager, EventStatus, eventInfoData, eve
     //Logger.log("Inside 2nd Else If", EventTileCol+1, tabCount - eventRowCount, EventTitle, ProgManager, EventStatus);
     var addRow = TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
     TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount,1).setValue(EventTitle);
+    TrackerDataTab.getRange(EventRow, VFCol+1, tabCount - eventRowCount,1).setValue(VehFam);
     TrackerDataTab.getRange(EventRow, PrgMgrCol+1, tabCount - eventRowCount,1).setValue(ProgManager);
     TrackerDataTab.getRange(EventRow, EventStatusCol+1, tabCount - eventRowCount,1).setValue(EventStatus);
   }  
@@ -225,6 +235,9 @@ function updateEventsData(eventInfoData, eventTabsData) {
   var NoPOInd = TrackerTabColIndices[26];
   var NoRecdInd = TrackerTabColIndices[27];
   
+  //var VFInd = TrackerTabColIndices[28];
+  var DaystoMRDInd = TrackerTabColIndices[29];
+  
   var updatedEventData = [];
   var tabCount = 0;
   
@@ -250,6 +263,7 @@ function updateEventsData(eventInfoData, eventTabsData) {
           TrackerDataTab.getRange(Row, TabCol+1, 1,1).setValue(updatedEventData[j][1][0]);
           TrackerDataTab.getRange(Row, PPPMEngCol+1, 1,1).setValue(updatedEventData[j][1][1]);
           TrackerDataTab.getRange(Row, MRDInd+1, 1,1).setValue(updatedEventData[j][1][2]);
+          TrackerDataTab.getRange(Row, DaystoMRDInd+1, 1,1).setFormula(`=G${Row}-TODAY()`);
           TrackerDataTab.getRange(Row, TotalPartsCol+1, 1,1).setValue(updatedEventData[j][1][3]);
           
           TrackerDataTab.getRange(Row, PercReqCol+1, 1,1).setValue(updatedEventData[j][1][4]);
@@ -273,10 +287,10 @@ function updateEventsData(eventInfoData, eventTabsData) {
           TrackerDataTab.getRange(Row, PercLateCol+1, 1,1).setValue(updatedEventData[j][1][19]);
           TrackerDataTab.getRange(Row, PercNotDefCol+1, 1,1).setValue(updatedEventData[j][1][20]);
           
-          TrackerDataTab.getRange(Row, NoRFQPendInd+1, 1,1).setFormula(`=G${Row}-M${Row}`);
-          TrackerDataTab.getRange(Row, NoREQInd+1, 1,1).setFormula(`=M${Row}-N${Row}`);
-          TrackerDataTab.getRange(Row, NoPOInd+1, 1,1).setFormula(`=N${Row}-O${Row}`);
-          TrackerDataTab.getRange(Row, NoRecdInd+1, 1,1).setFormula(`=O${Row}`);
+          TrackerDataTab.getRange(Row, NoRFQPendInd+1, 1,1).setFormula(`=I${Row}-O${Row}`);
+          TrackerDataTab.getRange(Row, NoREQInd+1, 1,1).setFormula(`=I${Row}-P${Row}`);
+          TrackerDataTab.getRange(Row, NoPOInd+1, 1,1).setFormula(`=I${Row}-Q${Row}`);
+          TrackerDataTab.getRange(Row, NoRecdInd+1, 1,1).setFormula(`=I${Row}-R${Row}`);
           break;
         }
       }
