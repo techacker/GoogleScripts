@@ -43,8 +43,74 @@ function updateStatusColumn() {
     }
   }
   
+  pushEventUpdates();
   
-  //updateProjectStatus();
+}
+
+
+function pushEventUpdates() {
+  
+  // Summary Sheet
+  
+  var SummarySheetURL = SpreadsheetApp.getActiveSpreadsheet().getUrl();
+  var SummarySheetLink = PPPMWorkloadGoogleScript.parseURL(SummarySheetURL);
+  
+  var SummarySheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Summary");
+  var sslr = SummarySheet.getLastRow();
+  var sslc = SummarySheet.getLastColumn();
+  
+  
+  // Workload Events
+  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
+  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
+  var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
+  var eslr = EventSheet.getLastRow();
+  var eslc = EventSheet.getLastColumn(); 
+  var headerRow = PPPMWorkloadGoogleScript.getHeaderRow(EventSheet, "Tracker URL");
+  
+  // Get col indexes from Events Sheet
+  var colIndices = PPPMWorkloadGoogleScript.getColIndex(EventSheet, headerRow);
+  
+  var VFInd = colIndices[0];
+  var EventTitleInd = colIndices[1];
+  var EventStatusInd = colIndices[3];
+  var ProgMgrInd = colIndices[4];
+  var urlColInd = colIndices[11];
+  
+  var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, eslr-headerRow, 1).getValues(); 
+  
+  var EventTitle, ProgMgr, EventStatus, VF, DaystoMRD;
+  var SummarySheet, sslc, sslr, SummaryRange, ssheaderRow, eventTabsData;
+  
+  // Update Master Workload File with information
+  
+  for (var i=0; i<trackerURLArray.length; i++) {
+    if (trackerURLArray[i][0] === SummarySheetLink) {
+      
+      EventTitle = EventSheet.getRange(i + headerRow+1, EventTitleInd+1, 1, 1).getValue();
+      ProgMgr = EventSheet.getRange(i + headerRow+1, ProgMgrInd+1, 1, 1).getValue();
+      EventStatus = EventSheet.getRange(i+ headerRow+1, EventStatusInd+1, 1, 1).getValue();
+      VF = EventSheet.getRange(i+ headerRow+1, VFInd+1, 1, 1).getValue();
+      
+      // Get Information from Event Tracker's Summary Tab
+      
+      SummaryRange = SummarySheet.getRange(1, 1, sslr, sslc).getValues();
+      ssheaderRow = PPPMWorkloadGoogleScript.getHeaderRow(SummarySheet, "Tab");
+      
+      // Events Tab Data from trackers file
+      eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
+      var infoCol = 3;
+      var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
+      
+      //addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      
+      if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "" || eventInfoData[0][1] !== "" || eventInfoData[0][2] !== "" 
+          || eventInfoData[0][3] !== "" || eventInfoData[0][4] !== "" || eventInfoData[0][5] !== "" || eventInfoData[0][6] !== "") {
+        PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+        PPPMWorkloadGoogleScript.updateEventsData(eventInfoData[0][0], eventTabsData);
+      }
+    }
+  }   
 }
 
 // ********* End: Update Status Column Function
