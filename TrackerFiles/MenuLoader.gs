@@ -6,7 +6,7 @@
 //Create menu dropdown
     function createMenu() {  
       const ui = SpreadsheetApp.getUi();
-      const menu = ui.createMenu("Simplify");
+      const menu = ui.createMenu("PPPM Tools");
       
       // Create Submenu
       var submenu = ui.createMenu("Fetch Info");
