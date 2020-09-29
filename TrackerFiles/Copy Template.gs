@@ -27,11 +27,15 @@ function addNewRowInSummarySheet() {
   //   =MASTER!W1, =MASTER!X1, =MASTER!U3, =MASTER!V3, =MASTER!W3, =MASTER!X3, ]]
   
   if (newSheetName.length !== 0) {
+    // Unhide all hidden rows
+    summarySheet.unhideRow(summarySheet.getRange(1, 1, lr, lc));
+    
     // Shift one row down
     MasterRow.insertCells(SpreadsheetApp.Dimension.ROWS);
     
     // Set first cell value to be the sheet name
     var Tab = summarySheet.getRange(TabRowNum+1, 1).setValue(newSheetName);
+    lr++;
     
     // Set formulas for other cells in this new row.
     for (var i=0; i<formulas[0].length-1; i++) {
@@ -43,7 +47,7 @@ function addNewRowInSummarySheet() {
   // Hide the Master Row to avoid confusion.
   for (var i=0; i<range.length; i++) {
     if (range[i][0].toUpperCase() === "MASTER") {
-      var MasterRowNum = i+2;
+      var MasterRowNum = lr;
       summarySheet.hideRows(MasterRowNum);
       ss.getSheetByName("MASTER").hideSheet();
     }
