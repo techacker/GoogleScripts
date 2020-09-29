@@ -66,13 +66,13 @@ function getHeaderRow(sheet, searchKey) {
 
 
 
-function getColIndex(headerRow) {
+function getColIndex(EventSheet, headerRow) {
   
-  var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
+  //var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
   var lr = EventSheet.getLastRow();
   var lc = EventSheet.getLastColumn();
   var headerSearchRange = EventSheet.getRange(1, 1, 10, lc).getValues();
-  var headerRow = getHeaderRow(EventSheet, "Event Title");
+  //var headerRow = getHeaderRow(EventSheet, "Event Title");
   var EventsHeader = EventSheet.getRange(headerRow, 1, 1, lc).getValues()[0];
   var colIndices = [];
   
@@ -111,8 +111,8 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   var TrackerTabColIndices = [];
   
   // Logger.log(TabHeader);
-  // [Event Title, Program Manager,	Event Status, Tab, PPPM Engineer, MRD, Total # of Parts, 
-  // % REQ, % PO, % Received, Cost, % Cancelled, 
+  // [Event Title, Vehicle Family, Program Manager,	Event Status, Tab, PPPM Engineer, MRD, Days to MRD,
+  // Total # of Parts, % REQ, % PO, % Received, Cost, % Cancelled, 
   // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
   // # On Time, # Exception, # Late, # Not Defined, 
   // % On Time, % Exception, % Late, % Not Defined, 
@@ -153,8 +153,11 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   var NoPOInd = TrackerTabColIndices.push(TabHeader.indexOf("#in PO"));
   var NoRecdInd = TrackerTabColIndices.push(TabHeader.indexOf("#in Rec'd"));
   
+  var VFInd = TrackerTabColIndices.push(TabHeader.indexOf("Vehicle Family"));
+  var DaystoMRDInd = TrackerTabColIndices.push(TabHeader.indexOf("Days until MRD"));
+  
   // Logger.log(TrackerTabColIndices);
-  // [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0]
+  // [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0]
   
   return TrackerTabColIndices;
   
