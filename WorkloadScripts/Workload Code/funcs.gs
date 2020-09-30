@@ -43,14 +43,14 @@ function addNewRow(rowData) {
 function getProgMgrDDA(){
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ws = ss.getSheetByName("Summary");
-  const PMvals = ws.getRange(3, 1, 3, 1).getValues();
+  const PMvals = ws.getRange(3, 1, 6, 1).getValues();
   return PMvals;
 }
 
 function getEventTypeDDA(){
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ws = ss.getSheetByName("Summary");
-  const ETvals = ws.getRange(26, 1, 7, 1).getValues();
+  const ETvals = ws.getRange(32, 1, 10, 1).getValues();
   return ETvals;
 }
 
