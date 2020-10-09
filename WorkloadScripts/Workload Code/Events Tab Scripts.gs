@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.1.1           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.1.4           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
@@ -8,13 +8,18 @@
 // -----------Update Trackers Basic Event Info section from Events Tab            ----- Completed 09/17/2020
 // -----------Get Event Tabs information from Trackers and update Tracker Tab     ----- Completed 09/21/2020
 // -----------Updated Tracker Tab Template and corresponding code                 ----- Completed 09/24/2020
+// -----------Bug fixes in Tracker Tab Scripts and utility to not count extra
+//            rows at the bottom in Tracker's Summary Sheet                       ----- Completed 10/09/2020
 
 
 //----------------------Start : Function to update tracker url field in Event Sheet
 
 function getNewTrackerURL() {
   
-  var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
+  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
+  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/";  // Test PPPM Workload File
+  var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
+  //var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
   var lr = EventSheet.getLastRow();
   var lc = EventSheet.getLastColumn();
   var headerRow = getHeaderRow(EventSheet, "Event Title");
@@ -54,6 +59,7 @@ function getNewTrackerURL() {
     var ShipAddress = dataRange[i][ShipAddColInd];
     var Attention = dataRange[i][AttnColInd];
     var url = dataRange[i][urlColInd];
+    
     if (EventStatus === "In-Process" && url === "") {
       var link = createNewTracker(VF.trim(), EventTitle.trim());
       EventSheet.getRange(i+headerRow+1, urlColInd+1, 1, 1).setValue(link);
@@ -68,6 +74,7 @@ function getNewTrackerURL() {
     else {
       updateEventInfo(url, EventTitle, Requestor, WBSCode, Location, Shipto, ShipAddress, Attention);
     }
+    
   }
   
 }
@@ -141,6 +148,8 @@ function updateEventInfo(url, EventTitle, Requestor, WBSCode, Location, Shipto, 
   var SummarySheet = SpreadsheetApp.openByUrl(url).getSheetByName("Summary");
   var lc = SummarySheet.getLastColumn();
   var lr = SummarySheet.getLastRow();
+  
+  Logger.log(lc, lr);
  
   // Update Event Tracker with Basic Event Info
   SummarySheet.getRange(1, 3).setValue(EventTitle);
