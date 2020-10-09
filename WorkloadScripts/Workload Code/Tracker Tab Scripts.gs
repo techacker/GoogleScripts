@@ -9,7 +9,8 @@ function updateTrackerTab() {
   var headerRow = getHeaderRow(EventSheet, "Tracker URL");
   
   // Get col indexes from Events Sheet
-  var colIndices = getColIndex();
+  var colIndices = getColIndex(EventSheet, headerRow);
+  
   var VFInd = colIndices[0];
   var EventTitleInd = colIndices[1];
   var EventStatusInd = colIndices[3];
@@ -35,7 +36,7 @@ function updateTrackerTab() {
       
       SummarySheet = SpreadsheetApp.openByUrl(trackerURLArray[i][0]).getSheetByName("Summary");
       sslc = SummarySheet.getLastColumn();
-      sslr = SummarySheet.getLastRow();
+      sslr = SummarySheet.getRange("A1").getDataRegion().getLastRow();
       SummaryRange = SummarySheet.getRange(1, 1, sslr, sslc).getValues();
       ssheaderRow = getHeaderRow(SummarySheet, "Tab");
       
@@ -43,7 +44,6 @@ function updateTrackerTab() {
       eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
       var infoCol = 3;
       var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
-      
       
       //addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
       
@@ -112,25 +112,21 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
   
   // Logger.log(eventInfo);
   // [2022 WS Rollover Spare Parts, Chris Sleiman, VD00228_VIVP_SIMP, DOW, 1256, 12501 Chrysler Dr, Detroit, MI, Chris Sleiman]
-
-  var updatedEventData = [];
   
+  // Logger.log(eventTabsData);
   // [[Chassis, Anurag Bansal, 11/11/2020, 25, 60.0%, 40.0%, 8.0%, 24.0%, $0.00, 15, 10, 2, 6], 
   // [Interior, Anurag Bansal, 11/12/2020, 25, 60.0%, 40.0%, 8.0%, 24.0%, $0.00, 15, 10, 2, 6], 
   // [MASTER, Name (dropdown), 09/15/2020, 0, 0.0%, 0.0%, 0.0%, 0.0%, $0.00, 0, 0, 0, 0]]
   
   var tabCount = 0;
   // Get number of tabs in Event Tracker Sheet
+  
   for (var i=0; i<eventTabsData.length; i++) {
-    if (eventTabsData[i][0].toUpperCase() !== "MASTER") {
+    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0] !== "") {
       // Include Event Title in the Event Data
-      updatedEventData.unshift([eventInfoData[i][0], eventTabsData[i]]);
       tabCount += 1;
     }
   }
-  
-  // Logger.log(updatedEventData);
-  // [[2022 WS Rollover Spare Parts, [CHASSIS, ANURAG BANSAL, 09/28/2020, 43, 44.2%, 37.2%, 7.0%, 0.0%, $38,151.26, 19, 16, 3, 0]]]
   
   // Count how many times the event title appears in Workload Tracker Data Tab 
   var eventRowCount = 0;
@@ -148,7 +144,7 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
     }
   }
   
-  // Logger.log(eventRowCount, EventRow);
+  //Logger.log(eventRowCount, EventRow);
   
   // Add rows if the count of sheets in Tracker file and workload file doesn't match
   if (tabCount === 0 && eventRowCount === 0) {
@@ -243,7 +239,7 @@ function updateEventsData(eventInfoData, eventTabsData) {
   
   // Get number of tabs in Event Tracker Sheet
   for (var i=0; i<eventTabsData.length; i++) {
-    if (eventTabsData[i][0].toUpperCase() !== "MASTER") {
+    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0] !== "") {
       // Include Event Title in the Event Data
       updatedEventData.unshift([eventInfoData, eventTabsData[i]]);
       tabCount += 1;
@@ -254,6 +250,7 @@ function updateEventsData(eventInfoData, eventTabsData) {
   // [[[2021 WS DV], [Interior, Anurag Bansal, 11/12/2020, 25, 60.0%, 40.0%, 8.0%, 24.0%, $0.00, 15, 10, 2, 6]], 
   // [[2021 WS DV], [Chassis, Anurag Bansal, 11/11/2020, 40, 62.5%, 62.5%, 25.0%, 37.5%, $0.00, 25, 25, 10, 15]]]
   
+  
   for (var j=0; j<updatedEventData.length; j++) {
     if (updatedEventData.length !== 0) {
       for (var i=0; i<TrackerDataTabRange.length; i++) {
@@ -263,7 +260,7 @@ function updateEventsData(eventInfoData, eventTabsData) {
           TrackerDataTab.getRange(Row, TabCol+1, 1,1).setValue(updatedEventData[j][1][0]);
           TrackerDataTab.getRange(Row, PPPMEngCol+1, 1,1).setValue(updatedEventData[j][1][1]);
           TrackerDataTab.getRange(Row, MRDInd+1, 1,1).setValue(updatedEventData[j][1][2]);
-          TrackerDataTab.getRange(Row, DaystoMRDInd+1, 1,1).setFormula(`=G${Row}-TODAY()`);
+          TrackerDataTab.getRange(Row, DaystoMRDInd+1, 1,1).setFormula(`=IFERROR(G${Row}-TODAY(),365)`);
           TrackerDataTab.getRange(Row, TotalPartsCol+1, 1,1).setValue(updatedEventData[j][1][3]);
           
           TrackerDataTab.getRange(Row, PercReqCol+1, 1,1).setValue(updatedEventData[j][1][4]);
@@ -288,9 +285,9 @@ function updateEventsData(eventInfoData, eventTabsData) {
           TrackerDataTab.getRange(Row, PercNotDefCol+1, 1,1).setValue(updatedEventData[j][1][20]);
           
           TrackerDataTab.getRange(Row, NoRFQPendInd+1, 1,1).setFormula(`=I${Row}-O${Row}`);
-          TrackerDataTab.getRange(Row, NoREQInd+1, 1,1).setFormula(`=I${Row}-P${Row}`);
-          TrackerDataTab.getRange(Row, NoPOInd+1, 1,1).setFormula(`=I${Row}-Q${Row}`);
-          TrackerDataTab.getRange(Row, NoRecdInd+1, 1,1).setFormula(`=I${Row}-R${Row}`);
+          TrackerDataTab.getRange(Row, NoREQInd+1, 1,1).setFormula(`=O${Row}-P${Row}`);
+          TrackerDataTab.getRange(Row, NoPOInd+1, 1,1).setFormula(`=P${Row}-Q${Row}`);
+          TrackerDataTab.getRange(Row, NoRecdInd+1, 1,1).setFormula(`=Q${Row}`);
           break;
         }
       }
