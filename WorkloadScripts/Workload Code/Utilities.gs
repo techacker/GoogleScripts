@@ -38,7 +38,7 @@ function getTrackerURL(VehFamFileNames, EventTitle) {
 }
 
 
-// Getting the Header Row of any sheet with a give search key
+// Getting the Header Row of any sheet with a given search key
 function getHeaderRow(sheet, searchKey) {
   
   //var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
@@ -69,7 +69,7 @@ function getHeaderRow(sheet, searchKey) {
 function getColIndex(EventSheet, headerRow) {
   
   //var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
-  var lr = EventSheet.getLastRow();
+  var lr = EventSheet.getRange("A1").getDataRegion().getLastRow();
   var lc = EventSheet.getLastColumn();
   var headerSearchRange = EventSheet.getRange(1, 1, 10, lc).getValues();
   //var headerRow = getHeaderRow(EventSheet, "Event Title");
