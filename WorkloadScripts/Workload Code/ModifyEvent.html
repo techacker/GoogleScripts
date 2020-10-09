@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <title>Update Event</title>
+    </head>
+    <body>
+        <div class="container">
+            <!--Title (dropdown)-->
+            <div class="form-group">
+                <label for="event-title">Event Title</label>
+                <select class="form-control" id="event-title"></select>
+            </div>
+
+            <!--Requestor (Text)-->
+            <div class="form-group">
+                <label for="requestor">Requestor(s)</label>
+                <input type="text" class="form-control" id="requestor">
+            </div>
+
+            <div class="row">
+                <!--WBS Code (Text)-->
+                <div class="form-group col">
+                    <label for="wbs">WBS Code</label>
+                    <input type="text" class="form-control" id="wbs">
+                </div>
+
+                <!--Location-->
+                <div class="form-group col">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location">
+                </div>
+            </div>
+
+            <!--Attention-->
+            <div class="form-group">
+                <label for="attn">Attention-to</label>
+                <input type="text" class="form-control" id="attn">
+            </div>
+
+            <!--Ship-to Code (Text)-->
+            <div class="form-group">
+                <label for="shipcode">Ship-to Code</label>
+                <input type="text" class="form-control" id="shipcode">
+            </div>
+
+            <!--Ship-to Address-->
+            <div class="form-group">
+                <label for="shipadd">Ship-to Address</label>
+                <input type="text" class="form-control" id="shipadd">
+            </div>
+
+            <button class="btn btn-primary" id="mainButton">Update</button>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script> 
+
+            //Triggered by 'click' listener
+            function afterButtonClicked(){
+
+                //Store input values as variables
+                var eventTitle = document.getElementById("event-title");
+                var requestor = document.getElementById("requestor");
+                var wbs = document.getElementById("wbs");
+                var location = document.getElementById("location");
+                var attn = document.getElementById("attn");
+                var shipcode = document.getElementById("shipcode");
+                var shipadd = document.getElementById("shipadd");
+                
+                Logger.log("Event Title", eventTitle);
+                //Assemble variables into row data       
+                var rowData = {
+                                //eventName: eventName.value,
+                                eventTitle: eventTitle.value,
+                                requestor: requestor.value,
+                                wbs: wbs.value,
+                                location: location.value,
+                                attn: attn.value,
+                                shipcode: shipcode.value,
+                                shipadd: shipadd.value
+                                };
+
+            //Runs updateRow script first, then afterSubmit script when complete
+                google.script.run.withSuccessHandler(afterSubmit).updateRow(rowData);
+                Logger.log(rowData);
+                Logger.log(rowData.eventTitle, rowData.requestor);
+                
+            }
+
+            //Clear form after row added & format new row
+            function afterSubmit(e){     
+
+                //Clear form input fields
+                var eventTitle = document.getElementById("event-title");
+                eventTitle.value="";
+                requestor.value="";
+                wbs.value="";
+                location.value="";
+                attn.value="";
+                shipcode.value="";
+                shipadd.value=""
+            }
+
+            function afterSidebarLoads(){
+                google.script.run.withSuccessHandler(afterEventReturned).getEventTitle();
+            }
+
+
+            function afterEventReturned(arrayOfArrays) {
+                var item = document.getElementById("event-title");      
+                arrayOfArrays.forEach(function(r){
+                var option = document.createElement("option");
+                option.textContent = r[0];
+                item.appendChild(option);        
+            });     
+            }
+
+            document.getElementById("mainButton").addEventListener("click",afterButtonClicked);
+            document.addEventListener("DOMContentLoaded",afterSidebarLoads);
+        </script>
+    </body>
+</html>
+
+
