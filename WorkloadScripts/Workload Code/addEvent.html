@@ -7,42 +7,44 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+  
         <title>Add New Event</title>
     </head>
     <body>
+    <form method="post" name="newEvent" class="needs-validation" novalidate>
         <div class="container">
+        <div></div>
             <div class="row">
                 <div class="form-group col">
                 <!--Model Year (Text)-->
-                    <label for="model-year">Model Year</label>
-                    <input type="text" class="form-control" id="model-year">
+                    <label for="model-year">Model Year*</label>
+                    <input type="text" class="form-control" id="model-year" required>
                 </div>
 
                 <!--Vehicle Family (Text)-->
                 <div class="form-group col">
-                    <label for="vehicle-family">Vehicle Family</label>
-                    <input type="text" class="form-control" id="vehicle-family">
+                    <label for="vehicle-family">Vehicle Family*</label>
+                    <input type="text" class="form-control" id="vehicle-family" required>
                 </div>
             </div>
 
             <!--Event Name (Text)-->
             <div class="form-group">
-                <label for="event-name">Event Name</label>
-                <input type="text" class="form-control" id="event-name">
+                <label for="event-name">Event Name*</label>
+                <input type="text" class="form-control" id="event-name" required="true">
             </div>
 
             <div class="row">
                 <!--Event Type (Dropdown)--> 
                 <div class="form-group col">
-                    <label for="event-type">Event Type</label>
-                    <select class="form-control" id="event-type"></select>
+                    <label for="event-type">Event Type*</label>
+                    <select class="form-control" id="event-type" required="true" placeholder=""></select>
                 </div>
 
                 <!--Earliest MRD (Text) **CHANGE TO DATE**-->
                 <div class="form-group col">
-                    <label for="orig-MRD">Earliest MRD</label>
-                    <input class="form-control" name="date" placeholder="MM/DD/YYY" type="text" id="orig-MRD">
+                    <label for="orig-MRD">Earliest MRD*</label>
+                    <input class="form-control" name="date" placeholder="MM/DD/YYYY" type="text" id="orig-MRD" required="true">
                 </div>
             </div>
 
@@ -104,6 +106,7 @@
 
             <button class="btn btn-primary" id="mainButton">Add</button>
         </div>
+        </form>
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -112,16 +115,17 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <script> 
+        
 
             //Triggered by 'click' listener
             function afterButtonClicked(){
-
+                        
                 //Store input values as variables
                 var modelYear = document.getElementById("model-year");
                 var vehicleFamily = document.getElementById("vehicle-family");
                 var eventName = document.getElementById("event-name");
                 var eventType = document.getElementById("event-type");
-                var eventTitle = modelYear.value+vehicleFamily.value+" "+eventName.value+" ("+eventType.value+")";
+                var eventTitle = modelYear.value + " " + vehicleFamily.value + " " + eventName.value;
                 var origMRD = document.getElementById("orig-MRD");
                 var eventStatus = "In-Process";        
                 var programManager = document.getElementById("program-manager");
@@ -133,7 +137,8 @@
                 var attn = document.getElementById("attn");
                 var shipcode = document.getElementById("shipcode");
                 var shipadd = document.getElementById("shipadd");
-
+          
+                
                 //Assemble variables into row data       
                 var rowData = {
                                 modelYear: modelYear.value,
@@ -153,10 +158,12 @@
                                 shipcode: shipcode.value,
                                 shipadd: shipadd.value
                                 };
-
-            //Runs addNewRow script first, then afterSubmit script when complete
-                google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
-            }
+                  
+                  //Runs addNewRow script first, then afterSubmit script when complete
+                  google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
+                  
+                
+                } 
 
             //Clear form after row added & format new row
             function afterSubmit(e){     
@@ -209,6 +216,7 @@
                 item.appendChild(option);        
                 });     
             }
+            
 
             document.getElementById("mainButton").addEventListener("click",afterButtonClicked);
             document.addEventListener("DOMContentLoaded",afterSidebarLoads);
