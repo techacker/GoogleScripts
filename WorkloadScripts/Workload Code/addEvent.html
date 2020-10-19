@@ -7,13 +7,12 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  
+
         <title>Add New Event</title>
     </head>
     <body>
     <form method="post" name="newEvent" class="needs-validation" novalidate>
         <div class="container">
-        <div></div>
             <div class="row">
                 <div class="form-group col">
                 <!--Model Year (Text)-->
@@ -38,13 +37,13 @@
                 <!--Event Type (Dropdown)--> 
                 <div class="form-group col">
                     <label for="event-type">Event Type*</label>
-                    <select class="form-control" id="event-type" required="true" placeholder=""></select>
+                    <select class="form-control" id="event-type" required="true"></select>
                 </div>
 
                 <!--Earliest MRD (Text) **CHANGE TO DATE**-->
                 <div class="form-group col">
                     <label for="orig-MRD">Earliest MRD*</label>
-                    <input class="form-control" name="date" placeholder="MM/DD/YYYY" type="text" id="orig-MRD" required="true">
+                    <input class="form-control" name="date" placeholder="MM/DD/YYY" type="text" id="orig-MRD" required="true">
                 </div>
             </div>
 
@@ -104,10 +103,9 @@
                 <input type="text" class="form-control" id="shipadd">
             </div>
 
-            <button class="btn btn-primary" id="mainButton">Add</button>
+            <button class="btn btn-primary" id="mainButton" disabled>Add Event</button>
         </div>
         </form>
-
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
@@ -115,11 +113,26 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <script> 
-        
+            // Validate required entries before allowing the form to be submitted
+            var frm = document.querySelector('form');
+            
+            frm.onchange = function() {
+                var modelYear = document.getElementById("model-year").value;
+                var vehicleFamily = document.getElementById("vehicle-family").value;
+                var eventName = document.getElementById("event-name").value;
+                //var eventType = document.getElementById("event-type");
+                var origMRD = document.getElementById("orig-MRD").value;
+                var btn = document.querySelector('button');
+                if (modelYear !== "" && vehicleFamily !== "" && eventName !== "" && origMRD !== "") {
+                    btn.disabled = false;
+                } else {
+                    btn.disabled = true;
+                }
+            }
 
             //Triggered by 'click' listener
             function afterButtonClicked(){
-                        
+
                 //Store input values as variables
                 var modelYear = document.getElementById("model-year");
                 var vehicleFamily = document.getElementById("vehicle-family");
@@ -137,8 +150,7 @@
                 var attn = document.getElementById("attn");
                 var shipcode = document.getElementById("shipcode");
                 var shipadd = document.getElementById("shipadd");
-          
-                
+
                 //Assemble variables into row data       
                 var rowData = {
                                 modelYear: modelYear.value,
@@ -158,12 +170,10 @@
                                 shipcode: shipcode.value,
                                 shipadd: shipadd.value
                                 };
-                  
-                  //Runs addNewRow script first, then afterSubmit script when complete
-                  google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
-                  
-                
-                } 
+
+            //Runs addNewRow script first, then afterSubmit script when complete
+                google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
+            }
 
             //Clear form after row added & format new row
             function afterSubmit(e){     
@@ -216,7 +226,6 @@
                 item.appendChild(option);        
                 });     
             }
-            
 
             document.getElementById("mainButton").addEventListener("click",afterButtonClicked);
             document.addEventListener("DOMContentLoaded",afterSidebarLoads);
