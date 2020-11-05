@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+    <base target="_top">
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
@@ -17,13 +18,13 @@
                 <div class="form-group col">
                 <!--Model Year (Text)-->
                     <label for="model-year">Model Year*</label>
-                    <input type="text" class="form-control" id="model-year" required>
+                    <input type="text" class="form-control" placeholder="2022" id="model-year" required>
                 </div>
 
                 <!--Vehicle Family (Text)-->
                 <div class="form-group col">
                     <label for="vehicle-family">Vehicle Family*</label>
-                    <input type="text" class="form-control" id="vehicle-family" required>
+                    <input type="text" class="form-control" placeholder="WL" id="vehicle-family" required>
                 </div>
             </div>
 
@@ -58,13 +59,20 @@
                 <label for="commentsH">Comments</label>
                 <input type="text" class="form-control" id="commentsH">
             </div>
-
+            
+            <div class="row">
             <!--Initial Part Number (Text)-->
-            <div class="form-group">
-                <label for="init-parts">Initial Part Numbers</label>
+            <div class="form-group col">
+                <label for="init-parts">No. of Parts</label>
                 <input type="text" class="form-control" id="init-parts">
             </div>
-
+            
+            <!--WBS Code (Text)-->
+                <div class="form-group col">
+                    <label for="wbs">WBS Code</label>
+                    <input type="text" class="form-control" id="wbs">
+                </div>
+            </div>
             <!--Requestor (Text)-->
             <div class="form-group">
                 <label for="requestor">Requestor(s)</label>
@@ -72,12 +80,6 @@
             </div>
 
             <div class="row">
-                <!--WBS Code (Text)-->
-                <div class="form-group col">
-                    <label for="wbs">WBS Code</label>
-                    <input type="text" class="form-control" id="wbs">
-                </div>
-
                 <!--Location-->
                 <div class="form-group col">
                     <label for="location">Location</label>
@@ -113,6 +115,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <script> 
+
             // Validate required entries before allowing the form to be submitted
             var frm = document.querySelector('form');
             
@@ -120,7 +123,6 @@
                 var modelYear = document.getElementById("model-year").value;
                 var vehicleFamily = document.getElementById("vehicle-family").value;
                 var eventName = document.getElementById("event-name").value;
-                //var eventType = document.getElementById("event-type");
                 var origMRD = document.getElementById("orig-MRD").value;
                 var btn = document.querySelector('button');
                 if (modelYear !== "" && vehicleFamily !== "" && eventName !== "" && origMRD !== "") {
@@ -173,6 +175,12 @@
 
             //Runs addNewRow script first, then afterSubmit script when complete
                 google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
+                
+                //Create new tracker and format the row
+                //google.script.run.formatRowCreateTracker();
+                
+                // Close the form
+                //google.script.host.close();
             }
 
             //Clear form after row added & format new row
@@ -186,7 +194,13 @@
                 var origMRD = document.getElementById("orig-MRD");         
                 var programManager = document.getElementById("program-manager");
                 var comments = document.getElementById("commentsH");
-                var initPNs = document.getElementById("init-parts");        
+                var initPNs = document.getElementById("init-parts");   
+                var requestor = document.getElementById("requestor");  
+                var wbs = document.getElementById("wbs");  
+                var location = document.getElementById("location");  
+                var attn = document.getElementById("attn");  
+                var shipcode = document.getElementById("shipcode"); 
+                var shipadd = document.getElementById("shipadd"); 
                 modelYear.value="";
                 vehicleFamily.value="";
                 eventName.value="";
