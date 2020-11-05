@@ -17,12 +17,18 @@ function updateTrackerTab() {
   var ProgMgrInd = colIndices[4];
   var urlColInd = colIndices[11];
   
-  
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, lr-headerRow, 1).getValues();  
   var BasicEventInfo = [];
   var EventTitle, ProgMgr, EventStatus, VF, DaystoMRD;
   var SummarySheet, sslc, sslr, SummaryRange, ssheaderRow, eventTabsData;
   
+  /*
+  // Remove filters it they were applied to sheet
+  var filterValue = EventSheet.getFilter();
+  if (filterValue === "Filter"){
+    filterValue.remove();
+  }
+  */
   // Get the tracker URL from Events Tab
   
   for (var i=0; i<trackerURLArray.length; i++) {
@@ -45,16 +51,15 @@ function updateTrackerTab() {
       var infoCol = 3;
       var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
       
-      //addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      //Logger.log(EventTitle, EventStatus);
       
-      if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "" || eventInfoData[0][1] !== "" || eventInfoData[0][2] !== "" 
-          || eventInfoData[0][3] !== "" || eventInfoData[0][4] !== "" || eventInfoData[0][5] !== "" || eventInfoData[0][6] !== "") {
-        addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
-        updateEventsData(eventInfoData[0][0], eventTabsData);
-      }
+      // Add Events to Tracker Data Tab
+      addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      // Update Event information in Tracker Data Tab
+      updateEventsData(EventTitle, eventTabsData);
+      
     }
   } 
-  
 }
 
 
@@ -69,17 +74,18 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
   var TrackerTabColIndices = getTrackerTabIndices(TrackerDataTab, headerRow);
   var TrackerDataTabRange = TrackerDataTab.getRange(headerRow+1, 1, lr, lc).getDisplayValues();
   
-  // Logger.log(TrackerTabColIndices);
-  // [0.0, 1.0, 2.0, 3.0, 4.0, 
-  // 5.0, 6.0, 7.0, 8.0, 
-  // 9.0, 10.0, 11.0, 12.0, 
-  // 13.0, 14.0, 15.0, 16.0, 
-  // 17.0, 18.0, 19.0, 20.0, 21.0]
-  // [Event Title, Program Manager,	Event Status, Tab, PPPM Engineer, MRD, Total # of Parts, 
-  // % REQ, % PO, % Received, Cost, % Cancelled, 
-  // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
-  // # On Time, # Exception, # Late, # Not Defined, 
-  // % On Time, % Exception, % Late, % Not Defined]
+  // [1.0, 4.0, 3.0, 2.0, 5.0, 6.0, 8.0, 9.0, 10.0, 
+  // 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 
+  // 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 
+  // 27.0, 28.0, 29.0, 0.0, 7.0]
+  
+  // [EventTitleInd, PrgMgrInd, EventStatusInd, TabInd, PPPMEngrInd, 
+  // MRDInd, TotalPartsInd, PercREQInd, PercPOInd, PercRecdInd, 
+  // CostInd, PercCancelledInd, REQInd, POIssuedInd, RecdInd, CancelledInd, 
+  // OnTimeInd, ExceptionInd, LateInd, NotDefInd,
+  // PercOnTimeInd, PercExceptionInd, PercLateInd, PercNotDefInd,
+  // NoRFQPendInd, NoREQInd, NoPOInd, NoRecdInd,
+  // VFInd, DaystoMRDInd]
   
   var EventTileCol = TrackerTabColIndices[0];
   var PrgMgrCol = TrackerTabColIndices[1];
@@ -91,11 +97,9 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
   // Get Event Titles from Workload file
   var TrackerTabEventTitles = [];
   var TrackerTabSheetNames = [];
-  //var EventandTabs = [];
   for (var i=0; i<TrackerDataTabRange.length; i++) {
     TrackerTabEventTitles.push(TrackerDataTabRange[i][EventTileCol]);
     TrackerTabSheetNames.push(TrackerDataTabRange[i][TabCol]);
-    //EventandTabs.push([TrackerDataTabRange[i][EventTileCol], TrackerDataTabRange[i][TabCol]]);
   }
   
   // Logger.log(eventInfoData);
@@ -110,7 +114,6 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
     eventInfo.push(eventInfoData[i][0]);
   }
   
-  // Logger.log(eventInfo);
   // [2022 WS Rollover Spare Parts, Chris Sleiman, VD00228_VIVP_SIMP, DOW, 1256, 12501 Chrysler Dr, Detroit, MI, Chris Sleiman]
   
   // Logger.log(eventTabsData);
@@ -119,10 +122,11 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
   // [MASTER, Name (dropdown), 09/15/2020, 0, 0.0%, 0.0%, 0.0%, 0.0%, $0.00, 0, 0, 0, 0]]
   
   var tabCount = 0;
-  // Get number of tabs in Event Tracker Sheet
   
+  // Get number of tabs in Event Tracker Sheet
   for (var i=0; i<eventTabsData.length; i++) {
-    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0] !== "") {
+    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0].toUpperCase() !== "OVERALL EVENT STATUS" 
+    && eventTabsData[i][0] !== "") {
       // Include Event Title in the Event Data
       tabCount += 1;
     }
@@ -131,7 +135,7 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
   // Count how many times the event title appears in Workload Tracker Data Tab 
   var eventRowCount = 0;
   for (var i=0; i<TrackerTabEventTitles.length; i++) {
-    if (TrackerTabEventTitles[i] === eventInfo[0]) {
+    if (TrackerTabEventTitles[i] === EventTitle && TrackerTabEventTitles[i] !== "") {
       eventRowCount += 1;
     }
   }
@@ -144,37 +148,38 @@ function addEventTitles(EventTitle, VehFam, ProgManager, EventStatus, eventInfoD
     }
   }
   
-  //Logger.log(eventRowCount, EventRow);
+  // 2022 MP PS QAF (QAF) 0.0 8.0 null
+  // 2022 VF IP DV Test 0.0 0.0 null
   
-  // Add rows if the count of sheets in Tracker file and workload file doesn't match
-  if (tabCount === 0 && eventRowCount === 0) {
-    //Logger.log("Inside if", headerRow+1, EventTitle, ProgManager, EventStatus);
-    var addRow = TrackerDataTab.getRange(headerRow+1, 1, 1,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
-    TrackerDataTab.getRange(headerRow+1, EventTileCol+1, 1,1).setValue(EventTitle);
-    TrackerDataTab.getRange(headerRow+1, VFCol+1, 1,1).setValue(VehFam);
-    TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, 1,1).setValue(ProgManager);
-    TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, 1,1).setValue(EventStatus);
+  
+  // Add rows if the event doesn't exist in the tracker tab
+  if (eventRowCount === 0 && tabCount !== 0) {
+    var addRow = TrackerDataTab.getRange(headerRow+1, 1, tabCount, lc).insertCells(SpreadsheetApp.Dimension.ROWS);
+    TrackerDataTab.getRange(headerRow+1, EventTileCol+1, tabCount, 1).setValue(EventTitle);
+    TrackerDataTab.getRange(headerRow+1, VFCol+1, tabCount, 1).setValue(VehFam);
+    TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, tabCount, 1).setValue(ProgManager);
+    TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, tabCount, 1).setValue(EventStatus);
   }
-  else if (eventRowCount === 0) {
-    //Logger.log("Inside 1st else if", tabCount, EventTitle, ProgManager, EventStatus);
-    var addRow = TrackerDataTab.getRange(headerRow+1, 1, tabCount,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
-    TrackerDataTab.getRange(headerRow+1, EventTileCol+1, tabCount,1).setValue(EventTitle);
-    TrackerDataTab.getRange(headerRow+1, VFCol+1, tabCount,1).setValue(VehFam);
-    TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, tabCount,1).setValue(ProgManager);
-    TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, tabCount,1).setValue(EventStatus);
-  }
+  // Add row if there are additional tabs are added
   else if (eventRowCount < tabCount) {
-    //Logger.log("Inside 2nd Else If", EventTileCol+1, tabCount - eventRowCount, EventTitle, ProgManager, EventStatus);
-    var addRow = TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount,lc).insertCells(SpreadsheetApp.Dimension.ROWS);
-    TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount,1).setValue(EventTitle);
-    TrackerDataTab.getRange(EventRow, VFCol+1, tabCount - eventRowCount,1).setValue(VehFam);
-    TrackerDataTab.getRange(EventRow, PrgMgrCol+1, tabCount - eventRowCount,1).setValue(ProgManager);
-    TrackerDataTab.getRange(EventRow, EventStatusCol+1, tabCount - eventRowCount,1).setValue(EventStatus);
-  }  
-  
+    var addRow = TrackerDataTab.getRange(EventRow, 1, tabCount - eventRowCount, lc).insertCells(SpreadsheetApp.Dimension.ROWS);
+    TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount, 1).setValue(EventTitle);
+    TrackerDataTab.getRange(EventRow, VFCol+1, tabCount - eventRowCount, 1).setValue(VehFam);
+    TrackerDataTab.getRange(EventRow, PrgMgrCol+1, tabCount - eventRowCount, 1).setValue(ProgManager);
+    TrackerDataTab.getRange(EventRow, EventStatusCol+1, tabCount - eventRowCount, 1).setValue(EventStatus);
+  } 
+  // Delete rows if there were additional tabs earlier but removed later on.
+  else if (eventRowCount > tabCount) {
+    var deleteRow = TrackerDataTab.getRange(EventRow, 1, eventRowCount - tabCount, lc).deleteCells(SpreadsheetApp.Dimension.ROWS);
+  }
+  // Update the event status column
+  else {
+    TrackerDataTab.getRange(EventRow, EventStatusCol+1, eventRowCount, 1).setValue(EventStatus);
+  }
+
 }
 
-function updateEventsData(eventInfoData, eventTabsData) {
+function updateEventsData(EventTitle, eventTabsData) {
   
   //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
   var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
@@ -186,31 +191,34 @@ function updateEventsData(eventInfoData, eventTabsData) {
   var TrackerDataTabRange = TrackerDataTab.getRange(headerRow+1, 1, lr, lc).getDisplayValues();
   
   // Logger.log(TrackerTabColIndices);
-  // [0.0, 1.0, 2.0, 3.0, 4.0, 
-  // 5.0, 6.0, 7.0, 8.0, 
-  // 9.0, 10.0, 11.0, 12.0, 
-  // 13.0, 14.0, 15.0, 16.0, 
-  // 17.0, 18.0, 19.0, 20.0, 21.0]
-  // [Event Title, Program Manager,	Event Status, Tab, PPPM Engineer, MRD, Total # of Parts, 
-  // % REQ, % PO, % Received, Cost, % Cancelled, 
-  // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
-  // # On Time, # Exception, # Late, # Not Defined, 
-  // % On Time, % Exception, % Late, % Not Defined]
+  
+  // [1.0, 4.0, 3.0, 2.0, 5.0, 6.0, 8.0, 9.0, 10.0, 
+  // 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 
+  // 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 
+  // 27.0, 28.0, 29.0, 0.0, 7.0]
+  
+  // [EventTitleInd, PrgMgrInd, EventStatusInd, TabInd, PPPMEngrInd, 
+  // MRDInd, TotalPartsInd, PercREQInd, PercPOInd, PercRecdInd, 
+  // CostInd, PercCancelledInd, REQInd, POIssuedInd, RecdInd, CancelledInd, 
+  // OnTimeInd, ExceptionInd, LateInd, NotDefInd,
+  // PercOnTimeInd, PercExceptionInd, PercLateInd, PercNotDefInd,
+  // NoRFQPendInd, NoREQInd, NoPOInd, NoRecdInd,
+  // VFInd, DaystoMRDInd]
   
   var EventTileCol = TrackerTabColIndices[0];
   var PrgMgrCol = TrackerTabColIndices[1];
   var EventStatusCol = TrackerTabColIndices[2];
   var TabCol = TrackerTabColIndices[3];
   var PPPMEngCol = TrackerTabColIndices[4];
+  
   var MRDInd = TrackerTabColIndices[5];
   var TotalPartsCol = TrackerTabColIndices[6];
-  
   var PercReqCol = TrackerTabColIndices[7];
   var PercPOCol = TrackerTabColIndices[8];
   var PercRecdCol = TrackerTabColIndices[9];
+  
   var CostCol = TrackerTabColIndices[10];
   var PercCancelledCol = TrackerTabColIndices[11];
-  
   var REQCol = TrackerTabColIndices[12];
   var POCol = TrackerTabColIndices[13];
   var PartsRecdCol = TrackerTabColIndices[14];
@@ -231,7 +239,7 @@ function updateEventsData(eventInfoData, eventTabsData) {
   var NoPOInd = TrackerTabColIndices[26];
   var NoRecdInd = TrackerTabColIndices[27];
   
-  //var VFInd = TrackerTabColIndices[28];
+  var VFInd = TrackerTabColIndices[28];
   var DaystoMRDInd = TrackerTabColIndices[29];
   
   var updatedEventData = [];
@@ -239,24 +247,25 @@ function updateEventsData(eventInfoData, eventTabsData) {
   
   // Get number of tabs in Event Tracker Sheet
   for (var i=0; i<eventTabsData.length; i++) {
-    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0] !== "") {
+    if (eventTabsData[i][0].toUpperCase() !== "MASTER" && eventTabsData[i][0].toUpperCase() !== "OVERALL EVENT STATUS" 
+    && eventTabsData[i][0] !== "") {
       // Include Event Title in the Event Data
-      updatedEventData.unshift([eventInfoData, eventTabsData[i]]);
+      updatedEventData.unshift([EventTitle, eventTabsData[i]]);
       tabCount += 1;
     }
   }
   
   // Logger.log(updatedEventData);
-  // [[[2021 WS DV], [Interior, Anurag Bansal, 11/12/2020, 25, 60.0%, 40.0%, 8.0%, 24.0%, $0.00, 15, 10, 2, 6]], 
-  // [[2021 WS DV], [Chassis, Anurag Bansal, 11/11/2020, 40, 62.5%, 62.5%, 25.0%, 37.5%, $0.00, 25, 25, 10, 15]]]
+  // [[2021 WD Media Spare Parts, [SpareParts, Jim Crile, 10/26/2020, 33, 100.0%, 75.8%, 6.1%, $0.00, 0.0%, 33, 25, 2, 0, 0, 0, 0, 33, 0.0%, 0.0%, 0.0%, 100.0%]]]
+  // [[2022 WL74 PHEV Pre-VP QAF, [PPPM, Anurag Bansal, 09/11/2020, 21, 100%, 100%, 100%, $7,223.96, 0.0%, 21, 21, 21, 0, 21, 0, 0, 0, 100.0%, 0.0%, 0.0%, 0.0%]]]
   
+  var EventTitlesInTrackerDataTab = TrackerDataTab.getRange(headerRow+1, EventTileCol+1, lr-1, 1).getValues();
   
   for (var j=0; j<updatedEventData.length; j++) {
     if (updatedEventData.length !== 0) {
-      for (var i=0; i<TrackerDataTabRange.length; i++) {
-        if (updatedEventData[j][0] === TrackerDataTabRange[i][0]) {
+      for (var i=0; i<EventTitlesInTrackerDataTab.length; i++) {
+        if (updatedEventData[j][0] === EventTitlesInTrackerDataTab[i][0]) {
           var Row = i+j+headerRow+1; 
-          //#in RFQ Pending	#in REQ	#in PO	#in Rec'd
           TrackerDataTab.getRange(Row, TabCol+1, 1,1).setValue(updatedEventData[j][1][0]);
           TrackerDataTab.getRange(Row, PPPMEngCol+1, 1,1).setValue(updatedEventData[j][1][1]);
           TrackerDataTab.getRange(Row, MRDInd+1, 1,1).setValue(updatedEventData[j][1][2]);
@@ -293,5 +302,4 @@ function updateEventsData(eventInfoData, eventTabsData) {
       }
     }
   }
-  
 }
