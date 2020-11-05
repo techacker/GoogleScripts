@@ -41,10 +41,7 @@ function updateStatusColumn() {
         ss.getRange(i + headerRow + 1, StatusInd, 1, 1).setValue("REQ SUBMITTED").setBackground("CYAN").setFontColor("Black");
       }
     }
-  }
-  
-  pushEventUpdates();
-  
+  }  
 }
 
 
@@ -61,8 +58,8 @@ function pushEventUpdates() {
   
   
   // Workload Events
-  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
-  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
+  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
+  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
   var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
   var eslr = EventSheet.getLastRow();
   var eslc = EventSheet.getLastColumn(); 
@@ -99,16 +96,25 @@ function pushEventUpdates() {
       
       // Events Tab Data from trackers file
       eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
+      
       var infoCol = 3;
       var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
       
-      //addEventTitles(EventTitle, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      // Remove tabs that are either "MASTER" or "OVERALL EVENT STATUS"
+      let usefulTabs = eventTabsData.filter(tabName => tabName[0].toUpperCase() !== "MASTER" 
+      && tabName[0].toUpperCase() !== "OVERALL EVENT STATUS");
       
+      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      PPPMWorkloadGoogleScript.updateEventsData(EventTitle, eventTabsData);
+      //PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, usefulTabs);
+      //PPPMWorkloadGoogleScript.updateEventsData(eventInfoData[0][0], eventTabsData);
+      /*
       if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "" || eventInfoData[0][1] !== "" || eventInfoData[0][2] !== "" 
           || eventInfoData[0][3] !== "" || eventInfoData[0][4] !== "" || eventInfoData[0][5] !== "" || eventInfoData[0][6] !== "") {
         PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
         PPPMWorkloadGoogleScript.updateEventsData(eventInfoData[0][0], eventTabsData);
       }
+      */
     }
   }   
 }
