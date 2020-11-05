@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body style="font-family: Georgia;">
+    <p>Hello <?= name ?>,</p>
+    <p></p>
+    <p>Would you please provide a quote for the components as shown in the table below?</p>
+    <p></p>
+    <table style="border-collapse: collapse; width: 400px; border: 2px solid gray;">
+    <thead>
+    <tr style="font-weight: bold; background-color: RoyalBlue; color: white;">
+    <td style="font-family: Georgia; border: solid 1px white; padding: 5px;">Part Number</td>
+    <td style="font-family: Georgia; border: solid 1px white; padding: 5px;">Description</td>
+    <td style="font-family: Georgia; border: solid 1px white; padding: 5px; text-align: center;">Qty</td>
+    <td style="font-family: Georgia; border: solid 1px white; padding: 5px; text-align: center;">MRD</td>
+    </tr>
+    </thead>
+    <tbody>
+    <? partDetails.forEach(r => { ?>
+    <tr style="border: solid 1px gray;">
+    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px;"><?= r[0] ?></td>
+    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px;"><?= r[1] ?></td>
+    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[2] ?></td>
+    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[3] ?></td>
+    </tr>
+    <? }) ?>
+    </tbody>
+    </table>
+    <p></p>
+    <p>The components will need to be shipped to the following address:</p>
+    <p><strong><?= shipAddress ?></strong></p>
+    <p></p>
+    <p>Please let me know if there are any questions or concerns.</p>
+    <p>We expect the quotes back within <strong>three</strong> business days.</p>
+    <p style="font-style: italic"><?= addText ?></p>
+    <p>Best Regards,</p>
+    <p style="font-size: 1.2em; font-weight: bold;"><?= userName ?></p>
+    <p style="font-size: 0.8em"><?= userTitle ?><br>
+    Pre-Production Parts Management (PPPM)<br>
+    800 Chrysler Dr, Auburn Hills, MI 48326<br>
+    Email: <?= userEmail ?><br>
+    Cell: <?= userCell ?><br>
+    Desk: <?= userDesk ?></p>    
+  </body>
+</html>
