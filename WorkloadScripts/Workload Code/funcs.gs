@@ -28,6 +28,16 @@ function addNewRow(rowData) {
     
   ]);       
   
+  formatRowCreateTracker();
+  //Function Complete (for success handler)
+  return true;  
+}
+
+
+function formatRowCreateTracker() {
+  
+  Browser.msgBox("Please Wait...", "Working on creating a new tracker. Another message will pop-up after it is done.", Browser.Buttons.OK);
+  
   //Format new row
   var as = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var lr = as.getLastRow();
@@ -36,8 +46,10 @@ function addNewRow(rowData) {
   as.getRange(lr-1, 16, 1, 22).copyTo(as.getRange(lr, 16, 1, 22), SpreadsheetApp.CopyPasteType.PASTE_FORMULA);
   as.getRange(lr-1, 1, 1, lc).copyTo(as.getActiveRange(), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
   
-  //Function Complete (for success handler)
-  return true;  
+  getNewTrackerURL();
+  
+  Browser.msgBox("Success", "A new Tracker was created. Look for its URL in Tracker URL field.", Browser.Buttons.OK);
+  
 }
 
 
