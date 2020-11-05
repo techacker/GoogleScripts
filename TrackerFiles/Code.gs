@@ -1,13 +1,13 @@
 // ------------------------------------------------------------------------- RFQ Draft Email Creations Program ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.9.0           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 3.0.0           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Further Development Ideas & Change Log:
 // -----------1. Validate the Tracker by finding the header            ----- Completed 08/21/2020
 // -----------2. Update Status on Summary Sheet                        ----- Completed 08/25/2020
 // -----------3. Update Supplier Info from a Master Sheet              ----- Completed 09/22/2020
 //------------4. Update PO information from a Master Sheet             ----- Completed 08/25/2020
-//------------5. Auto Create RFQ Forms                                 ----- Completed 09/09/2020
+//------------5. Auto Create RFQ Forms                                 ----- Completed 10/13/2020
 //------------6. Save RFQ forms in a Drive Folder with Program Name
 //------------7. Update GMail draft to include developed RFQ Forms
 //------------8. Send REQ Emails to suppliers
@@ -20,13 +20,16 @@
 //-----------15. Updated Summary Sheet formula to reference cells      ----- Completed 09/23/2020
 //-----------16. Updated Master Sheet Template and added new columns   ----- Completed 09/29/2020
 //-----------17. Push Event Status Update to Workload File             ----- Completed 09/29/2020
+//-----------18. Update Event Name in new tracker sheet                ----- Completed 09/30/2020
+//-----------19. Updated code to be able to have space in sheet name   ----- Completed 10/13/2020
+//-----------20. Convert RFQ EMails to HTML                            ----- Completed 11/03/2020
 
 
 
 // ********* Start: Main Function
 
 function createRFQEmails() {
-  var emailCount = DraftEmails();
+  var emailCount = DraftHTMLEmails();
   
   // Show a browser confirmation
   if (emailCount > 0){
@@ -177,7 +180,7 @@ function DraftEmails(){
   
   var uniqueSupplierCodes = [];
   
-  for (i=0; i < SCodes.length; i++) {
+  for (var i=0; i < SCodes.length; i++) {
     if (uniqueSupplierCodes.indexOf(SCodes[i][0]) === -1.0 && SCodes[i][0] !== "") {
       uniqueSupplierCodes.push(SCodes[i][0]);
     };
@@ -193,7 +196,7 @@ function DraftEmails(){
                  supplier: ""
                 };
   
-  var miscText = {initial: "Hello from FCA team,", 
+  var miscText = {initial: "Hello,", 
                   part1: "Can you please provide a quote for the following components with an MRD of ", 
                   part2: "",
                   part3: "The parts will need to be shipped to the following address:", 
@@ -209,7 +212,7 @@ function DraftEmails(){
   
   for (var j=0; j<uniqueSupplierCodes.length; j++) {
     for (var i=0; i<lr-headerRow; i++) {
-      if (SCodes[i][0] === uniqueSupplierCodes[j] && SEmail[i][0] !== "" && Status[i][0] === "") {
+      if (SCodes[i][0] === uniqueSupplierCodes[j] && SEmail[i][0] !== "" && Status[i][0] === "" && PN[i][0] !== "") {
         var reqdDate = mrd[i][0];
         var shipAddress = Ship[i][0];
         var toEmail = SEmail[i][0];
@@ -250,7 +253,7 @@ function DraftEmails(){
   };
   
   return emailCount;    
-  
+
 }; //Close DraftEmails function
 
 
