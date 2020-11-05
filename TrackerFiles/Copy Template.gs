@@ -6,10 +6,11 @@ function addNewRowInSummarySheet() {
   var summarySheet = ss.getSheetByName("SUMMARY");
   var lc = summarySheet.getLastColumn();
   var lr = summarySheet.getLastRow();
-  var newSheetName = copyMasterTemplate();
   var range = summarySheet.getRange(1, 1, lr, lc).getDisplayValues();
   var TabRowNum = 0;
   
+  // Get Event Name so it can be copied to new sheet
+  var EventName = summarySheet.getRange(1, 3).getDisplayValues()[0][0];
   
   // Get "Tab" Row number
   for (var i=0; i<range.length; i++) {
@@ -26,6 +27,8 @@ function addNewRowInSummarySheet() {
   //   =MASTER!T3, =MASTER!Q1, =MASTER!R1, =MASTER!S1, =MASTER!T1, =MASTER!U1, =MASTER!V1, 
   //   =MASTER!W1, =MASTER!X1, =MASTER!U3, =MASTER!V3, =MASTER!W3, =MASTER!X3, ]]
   
+  var newSheetName = copyMasterTemplate();
+  
   if (newSheetName.length !== 0) {
     // Unhide all hidden rows
     summarySheet.unhideRow(summarySheet.getRange(1, 1, lr, lc));
@@ -40,14 +43,14 @@ function addNewRowInSummarySheet() {
     // Set formulas for other cells in this new row.
     for (var i=0; i<formulas[0].length-1; i++) {
       var splits = formulas[0][i].split('!');  // Since formula is referenced with '!'
-      summarySheet.getRange(TabRowNum+1, i+2).setValue(`=${newSheetName}!${splits[1]}`);
+      summarySheet.getRange(TabRowNum+1, i+2).setValue(`='${newSheetName}'!${splits[1]}`);
     };
   };
   
   // Hide the Master Row to avoid confusion.
   for (var i=0; i<range.length; i++) {
     if (range[i][0].toUpperCase() === "MASTER") {
-      var MasterRowNum = lr;
+      var MasterRowNum = i+2;
       summarySheet.hideRows(MasterRowNum);
       ss.getSheetByName("MASTER").hideSheet();
     }
@@ -57,6 +60,10 @@ function addNewRowInSummarySheet() {
   
   if (sheetNames.includes("MASTER")) {
     ss.getSheetByName("MASTER").hideSheet();
+  }
+  
+  if (sheetNames.includes(newSheetName)) {
+    ss.getSheetByName(newSheetName).getRange(1, 1).setValue(EventName);
   }
   
   // PPPM Engineer	MRD	Total # of Parts	% REQ	% PO	% Received	Cost	% Cancelled	
@@ -118,10 +125,12 @@ function copyMasterTemplate() {
     // Check if the sheet exists, else copy the master with the given name
     if (sheetNames.includes(newSheetName)) {
       ui.alert("The sheet with " + newSheetName + " name already exists. Please choose a different name.", ui.ButtonSet.OK)
+      newSheetName = "";
     }
+    /*
     // Check if the given name has multiple words
     else if (newSheetName.split(" ").length>1) {
-      newSheetName = newSheetName.split(" ").join("");
+      //newSheetName = newSheetName.split(" ").join("");
       if (sheetNames.includes(newSheetName)){
         ui.alert("The sheet with " + newSheetName + " name already exists. Please choose a different name.", ui.ButtonSet.OK)
         var newSheetName = "";
@@ -130,6 +139,7 @@ function copyMasterTemplate() {
         MasterTempFile.getSheetByName("MASTER").copyTo(ss).setName(newSheetName).showSheet();
       }
     }
+    */
     else {
       MasterTempFile.getSheetByName("MASTER").copyTo(ss).setName(newSheetName).showSheet();
     }
