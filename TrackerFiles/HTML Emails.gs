@@ -35,9 +35,16 @@ function DraftHTMLEmails(){
     var addCC = settingObj['addCCEmails'];
     emailTemp.userName = settingObj['userName'];
     emailTemp.userTitle = settingObj['userTitle'];
-    emailTemp.userEmail = settingObj['userEmail'];
-    emailTemp.userCell = settingObj['userCell'];
-    emailTemp.userDesk = settingObj['userDesk'];
+    emailTemp.userEmail = "Email: " + settingObj['userEmail'];
+    emailTemp.userCell = "Cell: "+ settingObj['userCell'];
+    emailTemp.userDesk = "Desk: " + settingObj['userDesk'];
+  }
+  else {
+    emailTemp.userName = "";
+    emailTemp.userTitle = "";
+    emailTemp.userEmail = "";
+    emailTemp.userCell = "";
+    emailTemp.userDesk = "";
   }
  
   var headerRow = checkTemplate()[0];
@@ -170,4 +177,3 @@ function DraftHTMLEmails(){
   return emailCount;    
   
 }; //Close DraftHTMLEmails function
-
