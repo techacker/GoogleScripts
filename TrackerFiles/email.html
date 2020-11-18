@@ -3,7 +3,7 @@
   <head>
     <base target="_top">
   </head>
-  <body style="font-family: Georgia;">
+  <body style="font-family: Georgia, 'Sans serif'">
     <p>Hello <?= name ?>,</p>
     <p></p>
     <p>Would you please provide a quote for the components as shown in the table below?</p>
@@ -11,19 +11,19 @@
     <table style="border-collapse: collapse; width: 400px; border: 2px solid gray;">
     <thead>
     <tr style="font-weight: bold; background-color: RoyalBlue; color: white;">
-    <td style="font-family: Georgia; border: solid 1px white; padding: 5px;">Part Number</td>
-    <td style="font-family: Georgia; border: solid 1px white; padding: 5px;">Description</td>
-    <td style="font-family: Georgia; border: solid 1px white; padding: 5px; text-align: center;">Qty</td>
-    <td style="font-family: Georgia; border: solid 1px white; padding: 5px; text-align: center;">MRD</td>
+    <td style="font-family: sans-serif; border: solid 1px white; padding: 5px;">Part Number</td>
+    <td style="font-family: sans-serif; border: solid 1px white; padding: 5px;">Description</td>
+    <td style="font-family: sans-serif; border: solid 1px white; padding: 5px; text-align: center;">Qty</td>
+    <td style="font-family: sans-serif; border: solid 1px white; padding: 5px; text-align: center;">MRD</td>
     </tr>
     </thead>
     <tbody>
     <? partDetails.forEach(r => { ?>
     <tr style="border: solid 1px gray;">
-    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px;"><?= r[0] ?></td>
-    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px;"><?= r[1] ?></td>
-    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[2] ?></td>
-    <td style="font-family: Georgia; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[3] ?></td>
+    <td style="font-family: sans-serif; border: solid 1px gray; padding: 5px;"><?= r[0] ?></td>
+    <td style="font-family: sans-serif; border: solid 1px gray; padding: 5px;"><?= r[1] ?></td>
+    <td style="font-family: sans-serif; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[2] ?></td>
+    <td style="font-family: sans-serif; border: solid 1px gray; padding: 5px; text-align: center;"><?= r[3] ?></td>
     </tr>
     <? }) ?>
     </tbody>
@@ -40,8 +40,8 @@
     <p style="font-size: 0.8em"><?= userTitle ?><br>
     Pre-Production Parts Management (PPPM)<br>
     800 Chrysler Dr, Auburn Hills, MI 48326<br>
-    Email: <?= userEmail ?><br>
-    Cell: <?= userCell ?><br>
-    Desk: <?= userDesk ?></p>    
+    <?= userEmail ?><br>
+    <?= userCell ?><br>
+    <?= userDesk ?></p>    
   </body>
 </html>
