@@ -94,7 +94,7 @@ function pushEventUpdates() {
       SummaryRange = SummarySheet.getRange(1, 1, sslr, sslc).getValues();
       ssheaderRow = PPPMWorkloadGoogleScript.getHeaderRow(SummarySheet, "Tab");
       
-      // Events Tab Data from trackers file
+      // Event Data from individual trackers file
       eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
       
       var infoCol = 3;
@@ -104,94 +104,10 @@ function pushEventUpdates() {
       let usefulTabs = eventTabsData.filter(tabName => tabName[0].toUpperCase() !== "MASTER" 
       && tabName[0].toUpperCase() !== "OVERALL EVENT STATUS");
       
-      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
+      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, eventInfoData, eventTabsData);
       PPPMWorkloadGoogleScript.updateEventsData(EventTitle, eventTabsData);
-      //PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, usefulTabs);
-      //PPPMWorkloadGoogleScript.updateEventsData(eventInfoData[0][0], eventTabsData);
-      /*
-      if (eventInfoData[0][0] !== "<Event Title>" || eventInfoData[0][0] !== "" || eventInfoData[0][1] !== "" || eventInfoData[0][2] !== "" 
-          || eventInfoData[0][3] !== "" || eventInfoData[0][4] !== "" || eventInfoData[0][5] !== "" || eventInfoData[0][6] !== "") {
-        PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventStatus, eventInfoData, eventTabsData);
-        PPPMWorkloadGoogleScript.updateEventsData(eventInfoData[0][0], eventTabsData);
-      }
-      */
     }
   }   
 }
 
 // ********* End: Update Status Column Function
-
-/*
-// ********* Start: Update Project Status Function
-
-function updateProjectStatus() {
-  
-  var ss = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var lr = ss.getLastRow();
-  var lc = ss.getLastColumn();
-  
-  // Call checkTemplate() function to get the required headerRow and column indexes.
-  var headerRow = checkTemplate()[0];  
-  var indices = checkTemplate()[1];  
-  var header = ss.getRange(headerRow, 1, 1, lc).getValues()[0];  
-  var StatusInd = indices[9]+1;
-  var REQNumInd = indices[10]+1;
-  
-  var StatusRange = ss.getRange(headerRow + 1, StatusInd, lr-headerRow, 1).getValues();
-  var REQRange = ss.getRange(headerRow + 1, REQNumInd, lr-headerRow, 1).getValues();
-  
-  // Define a class for using the status column entries
-  
-  class Status {
-    constructor(name, times) {
-      this.name = name;
-      this.times = times;
-    }
-  }
-  
-  // Initialize the status entries using class
-  
-  const PreQuote = new Status("PRE QUOTE", 0);
-  const RFQSent = new Status("RFQ SENT", 0);
-  const REQSubmitted = new Status("REQ SUBMITTED", 0);
-  const POIssued = new Status("PO ISSUED", 0);
-  const PartsReceived = new Status("PARTS RECEIVED", 0);
-  
-  // Loop through the Status column to count each entry
-  
-  for (var i=0; i<REQRange.length; i++) {
-    if (REQRange[i][0] !== "") {
-      REQSubmitted.times += 1;
-    }
-  }
-  
-  for (var i=0; i<StatusRange.length; i++) {
-    if (StatusRange[i][0]) {
-      switch (StatusRange[i][0].toUpperCase()){
-        case RFQSent.name:
-          RFQSent.times += 1;
-          break;
-        case POIssued.name:
-          POIssued.times += 1;
-          break;
-        case PartsReceived.name:
-          PartsReceived.times += 1;
-          break;
-        default:
-          PreQuote.times += 1;
-      }
-    } 
-  }
-  
-  ss.getRange(1, 16).setValue(PreQuote.times + RFQSent.times + REQSubmitted.times  + POIssued.times + PartsReceived.times);
-  ss.getRange(1, 17).setValue(REQSubmitted.times);
-  ss.getRange(1, 18).setValue(POIssued.times);
-  ss.getRange(1, 19).setValue(PartsReceived.times);
-  //ss.getRange(1, 21).setValue(PreQuote.times);
-  ss.getRange(1, 22).setValue(RFQSent.times);
-  
-  
-}
-
-// ********* End: Update Project Status Function
-*/
