@@ -18,7 +18,7 @@
       // Add other items to menu
       menu.addItem("Create New Tracker Sheet","addNewRowInSummarySheet");
       menu.addItem("Get Supplier Info","UpdateSupplierInfo");
-      menu.addItem("Get PO Details","UpdatePO");
+      menu.addItem("Refresh Order Details","UpdatePO");
       
       menu.addSeparator();
       menu.addItem("Draft RFQ Emails","createRFQEmails");
