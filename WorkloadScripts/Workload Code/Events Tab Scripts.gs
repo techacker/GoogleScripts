@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.3.4           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.6.1           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
@@ -13,6 +13,12 @@
 // -----------Revise Tracker Tab code because of renaming columns                 ----- Completed 10/12/2020
 // -----------Revise Tracker Tab code becaue of archiving/complete                ----- Completed 10/27/2020
 // -----------Separated 'push event info' function for code optimization          ----- Completed 10/12/2020
+// -----------Added 'Event Name + Tab' column                                     ----- Completed 11/09/2020
+// -----------Added 'Tracker URL' column to Tracker Data Tab                      ----- Completed 12/04/2020
+// -----------Parts Count will be used from Event Tab if no one is assigned yet   ----- Completed 12/04/2020
+// -----------Event MRD will be used from Event Tab if it is a new tracker        ----- Completed 12/04/2020
+// -----------Bug Fix for 'Add New Event'                                         ----- Completed 12/07/2020
+// -----------Separated 'Archive tracker' function                                ----- Completed 12/10/2020
 
 
 //----------------------Start : Function to update tracker url field in Event Sheet
@@ -55,7 +61,7 @@ function getNewTrackerURL() {
   var ShiptoColInd = colIndices[8];
   var ShipAddColInd = colIndices[9];
   var AttnColInd = colIndices[10];
-  var urlColInd = colIndices[11];
+  var urlColInd = colIndices[12];
   
   for (var i=0; i<dataRange.length; i++) { 
     var VF = dataRange[i][VFInd];
@@ -77,6 +83,8 @@ function getNewTrackerURL() {
       EventSheet.getRange(i+headerRow+1, urlColInd+1, 1, 1).setValue(link);
       pushEventInfo(link, EventTitle, Requestor, WBSCode, Location, Shipto, ShipAddress, Attention);
     }
+    
+    /*
     else if (EventStatus === "Complete" && url !== "") {
       var id = url.split('/')[5];
       var ArchiveFolder = DriveApp.getFoldersByName(ArchiveFolderName);
@@ -84,7 +92,10 @@ function getNewTrackerURL() {
       trackerFile.moveTo(ArchiveFolder.next());
       EventSheet.getRange(i+headerRow+1, EventStatusColInd+1, 1, 1).setValue("Archived");
     }
+    */
   }
+  
+  return true;
 }
 
 //----------------------End : Function to update tracker url field in Event Sheet
@@ -179,7 +190,7 @@ function pushEventInfo(link, EventTitle, Requestor, WBSCode, Location, Shipto, S
   var ShiptoColInd = colIndices[8];
   var ShipAddColInd = colIndices[9];
   var AttnColInd = colIndices[10];
-  var urlColInd = colIndices[11];
+  var urlColInd = colIndices[12];
   
   if (link) {
     var SummarySheet = SpreadsheetApp.openByUrl(link).getSheetByName("Summary");
@@ -216,3 +227,56 @@ function pushEventInfo(link, EventTitle, Requestor, WBSCode, Location, Shipto, S
     }
   }
 }
+
+
+
+//----------------------Start : Function to archive tracker from Event Sheet
+
+function archiveTrackers() {
+  
+  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
+  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/";  // Test PPPM Workload File
+  var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
+  var lr = EventSheet.getLastRow();
+  var lc = EventSheet.getLastColumn();
+  var headerRow = getHeaderRow(EventSheet, "Event Title");
+  var colIndices = getColIndex(EventSheet, headerRow);
+  
+  // Logger.log(colIndices);
+  // [2.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 30.0]
+  // VFInd, EventTitleInd, MRDColInd, EventStatusColInd, ProgMgrColInd, RequestorColInd, 
+  // WBSColInd, LocColInd, ShiptoColInd, ShipAddColInd, AttnColInd, urlColInd
+  
+  var EventsHeader = EventSheet.getRange(headerRow, 1, 1, lc).getValues()[0];
+  var dataRange = EventSheet.getRange(headerRow+1, 1, lr-headerRow, lc).getDisplayValues();
+  var PPPMFolderName = "PPPM Shared Part Trackers";
+  var ArchiveFolderName = "Archive - PPPM Trackers";
+  
+  /*
+  // Remove filters it they were applied to sheet
+  var filterValue = EventSheet.getFilter();
+  if (filterValue === "Filter"){
+    filterValue.remove();
+  }
+  */
+  
+  var EventStatusColInd = colIndices[3];
+  var urlColInd = colIndices[12];
+  
+  for (var i=0; i<dataRange.length; i++) { 
+    var EventStatus = dataRange[i][EventStatusColInd];
+    var url = dataRange[i][urlColInd];
+    
+    if (EventStatus === "Complete" && url !== "") {
+      var id = url.split('/')[5];
+      var ArchiveFolder = DriveApp.getFoldersByName(ArchiveFolderName);
+      var trackerFile = DriveApp.getFileById(id);
+      trackerFile.moveTo(ArchiveFolder.next());
+      EventSheet.getRange(i+headerRow+1, EventStatusColInd+1, 1, 1).setValue("Archived");
+    }
+  }
+  
+  return true;
+}
+
+//----------------------End : Function to Archive trackers from Event Sheet
