@@ -70,13 +70,15 @@ function pushEventUpdates() {
   
   var VFInd = colIndices[0];
   var EventTitleInd = colIndices[1];
+  var EventMRDInd = colIndices[2];
   var EventStatusInd = colIndices[3];
   var ProgMgrInd = colIndices[4];
-  var urlColInd = colIndices[11];
+  var PartCountColInd = colIndices[11];
+  var urlColInd = colIndices[12];
   
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, eslr-headerRow, 1).getValues(); 
   
-  var EventTitle, ProgMgr, EventStatus, VF, DaystoMRD;
+  var VF, EventTitle, EventMRD, EventStatus, ProgMgr, PartCount, URL;
   var SummarySheet, sslc, sslr, SummaryRange, ssheaderRow, eventTabsData;
   
   // Update Master Workload File with information
@@ -85,9 +87,12 @@ function pushEventUpdates() {
     if (trackerURLArray[i][0] === SummarySheetLink) {
       
       EventTitle = EventSheet.getRange(i + headerRow+1, EventTitleInd+1, 1, 1).getValue();
+      EventMRD = EventSheet.getRange(i + headerRow+1, EventMRDInd+1, 1, 1).getDisplayValue();
       ProgMgr = EventSheet.getRange(i + headerRow+1, ProgMgrInd+1, 1, 1).getValue();
       EventStatus = EventSheet.getRange(i+ headerRow+1, EventStatusInd+1, 1, 1).getValue();
       VF = EventSheet.getRange(i+ headerRow+1, VFInd+1, 1, 1).getValue();
+      PartCount = EventSheet.getRange(i+ headerRow+1, PartCountColInd+1, 1, 1).getValue();
+      URL = trackerURLArray[i][0];
       
       // Get Information from Event Tracker's Summary Tab
       
@@ -104,8 +109,8 @@ function pushEventUpdates() {
       let usefulTabs = eventTabsData.filter(tabName => tabName[0].toUpperCase() !== "MASTER" 
       && tabName[0].toUpperCase() !== "OVERALL EVENT STATUS");
       
-      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, eventInfoData, eventTabsData);
-      PPPMWorkloadGoogleScript.updateEventsData(EventTitle, eventTabsData);
+      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, URL, eventInfoData, eventTabsData);
+      PPPMWorkloadGoogleScript.updateEventsData(EventTitle, EventMRD, PartCount, eventTabsData);
     }
   }   
 }
