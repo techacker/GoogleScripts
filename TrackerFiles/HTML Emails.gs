@@ -125,10 +125,24 @@ function DraftHTMLEmails(){
       if (SCodes[i][0] === uniqueSupplierCodes[j] && SEmail[i][0] !== "" && Status[i][0] === "" && PN[i][0] !== "") {
         
         var shipAddress = Ship[i][0];
-        var toEmail = SEmail[i][0];
-        var ccEmail = AEmail[i][0];
+        var toEmail = "";
+        var ccEmail = "";
+        const regex = /(\w+\.*\w+\.*\w+@\w+\.*\-*\+*\w+\.*\w+)/gm;
+        const SEmailstr = SEmail[i][0];
+        const AEmailstr = AEmail[i][0];
+        let SEmailMatches = SEmailstr.match(regex);
+        let AEmailMatches = AEmailstr.match(regex);
+        if (SEmailMatches !== null) {
+          SEmailMatches.forEach(match => { 
+                          toEmail += match + ", ";})
+        }
+        if (AEmailMatches !== null) {
+          AEmailMatches.forEach(match => { 
+                          ccEmail += match + ", ";})
+        }
         emailTemp.name = Name[i][0].split(" ")[0];
         emailTemp.shipAddress = Ship[i][0];
+        emailTemp.prog = Prog;
         sub['supplier'] = CompNames[i][0];
         
         // Add part number, description and qty to PartDetails array
