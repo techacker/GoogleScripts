@@ -8,6 +8,24 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <style>
+        .form-control::placeholder {
+            color: darkblue;
+            opacity: 0.4;
+            }
+        .my::placeholder { 
+            color: red;
+            }
+        .vf::placeholder { 
+            color: red;
+            }
+        .event::placeholder { 
+            color: red;
+            }
+        .mrd::placeholder {
+            color: red;
+            }
+        </style>
 
         <title>Add New Event</title>
     </head>
@@ -18,33 +36,33 @@
                 <div class="form-group col">
                 <!--Model Year (Text)-->
                     <label for="model-year">Model Year*</label>
-                    <input type="text" class="form-control" placeholder="2022" id="model-year" required>
+                    <input type="text" class="form-control my" id="model-year" placeholder="ex: 2022" required>
                 </div>
 
                 <!--Vehicle Family (Text)-->
                 <div class="form-group col">
                     <label for="vehicle-family">Vehicle Family*</label>
-                    <input type="text" class="form-control" placeholder="WL" id="vehicle-family" required>
+                    <input type="text" class="form-control vf" id="vehicle-family" placeholder="ex: WL" required>
                 </div>
             </div>
 
             <!--Event Name (Text)-->
             <div class="form-group">
                 <label for="event-name">Event Name*</label>
-                <input type="text" class="form-control" id="event-name" required="true">
+                <input type="text" class="form-control event" id="event-name" placeholder="ex: Sled Series" required="true">
             </div>
 
             <div class="row">
                 <!--Event Type (Dropdown)--> 
                 <div class="form-group col">
-                    <label for="event-type">Event Type*</label>
+                    <label for="event-type">Event Type</label>
                     <select class="form-control" id="event-type" required="true"></select>
                 </div>
 
                 <!--Earliest MRD (Text) **CHANGE TO DATE**-->
                 <div class="form-group col">
                     <label for="orig-MRD">Earliest MRD*</label>
-                    <input class="form-control" name="date" placeholder="MM/DD/YYY" type="text" id="orig-MRD" required="true">
+                    <input class="form-control mrd" name="date" placeholder="MM/DD/YYYY" type="text" id="orig-MRD" required="true">
                 </div>
             </div>
 
@@ -57,55 +75,54 @@
             <!--Comments (Text)-->
             <div class="form-group">
                 <label for="commentsH">Comments</label>
-                <input type="text" class="form-control" id="commentsH">
+                <input type="text" class="form-control" placeholder="ex: Additonal info" id="commentsH">
             </div>
             
             <div class="row">
-            <!--Initial Part Number (Text)-->
-            <div class="form-group col">
-                <label for="init-parts">No. of Parts</label>
-                <input type="text" class="form-control" id="init-parts">
-            </div>
-            
-            <!--WBS Code (Text)-->
+                <!--WBS Code (Text)-->
                 <div class="form-group col">
                     <label for="wbs">WBS Code</label>
-                    <input type="text" class="form-control" id="wbs">
+                    <input type="text" class="form-control" placeholder="ex: VD00194" id="wbs">
+                </div> 
+                
+                <!--Initial Part Number (Text)-->
+                <div class="form-group col">
+                    <label for="init-parts">No. of Parts</label>
+                    <input type="text" class="form-control" placeholder="ex: 100" id="init-parts">
                 </div>
             </div>
+
             <!--Requestor (Text)-->
             <div class="form-group">
                 <label for="requestor">Requestor(s)</label>
-                <input type="text" class="form-control" id="requestor">
+                <input type="text" class="form-control" placeholder="ex: John Doe" id="requestor">
             </div>
 
-            <div class="row">
-                <!--Location-->
-                <div class="form-group col">
-                    <label for="location">Location</label>
-                    <input type="text" class="form-control" id="location">
-                </div>
-            </div>
+             <!--Location-->
+             <div class="form-group">
+                 <label for="location">Location</label>
+                 <input type="text" class="form-control" placeholder="ex: CPG" id="location">
+             </div>
 
             <!--Attention-->
             <div class="form-group">
                 <label for="attn">Attention-to</label>
-                <input type="text" class="form-control" id="attn">
+                <input type="text" class="form-control" placeholder="ex: Jane Doe" id="attn">
             </div>
 
             <!--Ship-to Code (Text)-->
             <div class="form-group">
                 <label for="shipcode">Ship-to Code</label>
-                <input type="text" class="form-control" id="shipcode">
+                <input type="text" class="form-control" placeholder= "ex: 1250" id="shipcode">
             </div>
 
             <!--Ship-to Address-->
             <div class="form-group">
                 <label for="shipadd">Ship-to Address</label>
-                <input type="text" class="form-control" id="shipadd">
+                <input type="text" class="form-control" placeholder= "ex: 12501 Chrysler Dr" id="shipadd">
             </div>
 
-            <button class="btn btn-primary" id="mainButton" disabled>Add Event</button>
+            <button class="btn btn-light btn-block" id="mainButton" disabled>Add New Event</button>
         </div>
         </form>
         <!-- Optional JavaScript -->
@@ -115,7 +132,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
         <script> 
-
             // Validate required entries before allowing the form to be submitted
             var frm = document.querySelector('form');
             
@@ -127,6 +143,8 @@
                 var btn = document.querySelector('button');
                 if (modelYear !== "" && vehicleFamily !== "" && eventName !== "" && origMRD !== "") {
                     btn.disabled = false;
+                    btn.classList.remove('btn-light');
+                    btn.classList.add('btn-primary');
                 } else {
                     btn.disabled = true;
                 }
@@ -140,7 +158,7 @@
                 var vehicleFamily = document.getElementById("vehicle-family");
                 var eventName = document.getElementById("event-name");
                 var eventType = document.getElementById("event-type");
-                var eventTitle = modelYear.value + " " + vehicleFamily.value + " " + eventName.value;
+                var eventTitle = modelYear.value + " " + vehicleFamily.value.toUpperCase() + " " + eventName.value;
                 var origMRD = document.getElementById("orig-MRD");
                 var eventStatus = "In-Process";        
                 var programManager = document.getElementById("program-manager");
@@ -156,7 +174,7 @@
                 //Assemble variables into row data       
                 var rowData = {
                                 modelYear: modelYear.value,
-                                vehicleFamily: vehicleFamily.value,
+                                vehicleFamily: vehicleFamily.value.toUpperCase(),
                                 eventName: eventName.value,
                                 eventType:eventType.value,
                                 eventTitle,
@@ -175,12 +193,14 @@
 
             //Runs addNewRow script first, then afterSubmit script when complete
                 google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
-                
+                              
                 //Create new tracker and format the row
-                //google.script.run.formatRowCreateTracker();
+                //google.script.run.withSuccessHandler(afterSubmit).formatRowCreateTracker();
                 
                 // Close the form
                 //google.script.host.close();
+
+                            
             }
 
             //Clear form after row added & format new row
@@ -200,7 +220,7 @@
                 var location = document.getElementById("location");  
                 var attn = document.getElementById("attn");  
                 var shipcode = document.getElementById("shipcode"); 
-                var shipadd = document.getElementById("shipadd"); 
+                var shipadd = document.getElementById("shipadd");  
                 modelYear.value="";
                 vehicleFamily.value="";
                 eventName.value="";
@@ -214,7 +234,7 @@
                 location.value="";
                 attn.value="";
                 shipcode.value="";
-                shipadd.value=""
+                shipadd.value="";
             }
 
             function afterSidebarLoads(){
