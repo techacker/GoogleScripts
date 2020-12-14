@@ -45,7 +45,7 @@ function addNewRowInSummarySheet() {
       var splits = formulas[0][i].split('!');  // Since formula is referenced with '!'
       summarySheet.getRange(TabRowNum+1, i+2).setValue(`='${newSheetName}'!${splits[1]}`);
     };
-    summarySheet.getRange(TabRowNum+1, 4).setValue("Upcoming");
+    summarySheet.getRange(TabRowNum+1, 4).setValue("Active");
   };
   
   // Hide the Master Row to avoid confusion.
