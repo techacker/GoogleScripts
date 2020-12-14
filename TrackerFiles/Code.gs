@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------- RFQ Draft Email Creations Program ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Architect: Anurag Bansal     ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 50.0.5          ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 50.1.1          ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Further Development Ideas & Change Log:
 // -----------1. Validate the Tracker by finding the header            ----- Completed 08/21/2020
@@ -24,6 +24,8 @@
 //-----------19. Updated code to be able to have space in sheet name   ----- Completed 10/13/2020
 //-----------20. Convert RFQ EMails to HTML with Sans-serif font       ----- Completed 11/13/2020
 //-----------21. Added Status Column "Active, Complete and Upcoming"   ----- Completed 11/11/2020
+//-----------22. Modified regex to pick email from Emails fields       ----- Completed 12/03/2020
+//-----------23. Updated the reference library from Workload Script    ----- Completed 12/07/2020
 
 
 
