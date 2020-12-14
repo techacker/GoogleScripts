@@ -12,6 +12,7 @@
       //menu.addItem("Manage Trackers","getNewTrackerURL");
       menu.addItem("Push Event Info","pushEventInfo");
       menu.addItem("Refresh Event Status","updateTrackerTab");
+      menu.addItem("Archive Trackers","archiveTrackers");
       menu.addToUi();  
     }
 
