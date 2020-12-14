@@ -1,170 +1,269 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+    <base target="_top">
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <style>
+        .form-control::placeholder {
+            color: darkblue;
+            opacity: 0.4;
+            }
+        .my::placeholder { 
+            color: red;
+            }
+        .vf::placeholder { 
+            color: red;
+            }
+        .event::placeholder { 
+            color: red;
+            }
+        .mrd::placeholder {
+            color: red;
+            font-size: 13px;
+            }
+        </style>
 
-    <title>Add New Event</title>
-  </head>
-  <body>
-  <div class="container">
-    <div>
-          
-<!--Model Year (Text)-->
-      <div class="form-group">
-        <label for="model-year">Model Year</label>
-        <input type="text" class="form-control" id="model-year">
-      </div>
+        <title>Add New Event</title>
+    </head>
+    <body>
+    <form method="post" name="newEvent" class="needs-validation" novalidate>
+        <div class="container">
+            <div class="row">
+                <div class="form-group col">
+                <!--Model Year (Text)-->
+                    <label for="model-year">Model Year*</label>
+                    <input type="text" class="form-control my" id="model-year" placeholder="ex: 2022" required>
+                </div>
 
-<!--Vehicle Family (Text)-->
-      <div class="form-group">
-        <label for="vehicle-family">Vehicle Family</label>
-        <input type="text" class="form-control" id="vehicle-family">
-      </div>
+                <!--Vehicle Family (Text)-->
+                <div class="form-group col">
+                    <label for="vehicle-family">Vehicle Family*</label>
+                    <input type="text" class="form-control vf" id="vehicle-family" placeholder="ex: WL" required>
+                </div>
+            </div>
 
-<!--Event Name (Text)-->
-      <div class="form-group">
-        <label for="event-name">Event Name</label>
-        <input type="text" class="form-control" id="event-name">
-      </div>
+            <!--Event Name (Text)-->
+            <div class="form-group">
+                <label for="event-name">Event Name*</label>
+                <input type="text" class="form-control event" id="event-name" placeholder="ex: Sled Series" required="true">
+            </div>
 
-<!--Program Manager (Dropdown)--> 
-      <div class="form-group">
-        <label for="event-type">Event Type</label>
-        <select class="form-control" id="event-type">
-        </select>
-      </div>
+            <div class="row">
+                <!--Event Type (Dropdown)--> 
+                <div class="form-group col">
+                    <label for="event-type">Event Type</label>
+                    <select class="form-control" id="event-type" required="true"></select>
+                </div>
 
-<!--Earliest MRD (Text) **CHANGE TO DATE**-->
-      <div class="form-group">
-        <label for="orig-MRD">Earliest MRD</label>
-        <input type="text" class="form-control" id="orig-MRD">
-      </div>
+                <!--Earliest MRD (Text) **CHANGE TO DATE**-->
+                <div class="form-group col">
+                    <label for="orig-MRD">Earliest MRD*</label>
+                    <input class="form-control mrd" name="date" placeholder="MM/DD/YYYY" type="text" id="orig-MRD" required="true">
+                </div>
+            </div>
 
-<!--Program Manager (Dropdown)--> 
-      <div class="form-group">
-        <label for="program-manager">Program Manager</label>
-        <select class="form-control" id="program-manager">
-        </select>
-      </div>
+            <!--Program Manager (Dropdown)--> 
+            <div class="form-group">
+                <label for="program-manager">Program Manager</label>
+                <select class="form-control" id="program-manager"></select>
+            </div>
 
-<!--Comments (Text)-->
-      <div class="form-group">
-        <label for="commentsH">Comments</label>
-        <input type="text" class="form-control" id="commentsH">
-      </div>
+            <!--Comments (Text)-->
+            <div class="form-group">
+                <label for="commentsH">Comments</label>
+                <input type="text" class="form-control" placeholder="ex: Additonal info" id="commentsH">
+            </div>
+            
+            <div class="row">
+                <!--WBS Code (Text)-->
+                <div class="form-group col">
+                    <label for="wbs">WBS Code</label>
+                    <input type="text" class="form-control" placeholder="ex: VD00194" id="wbs">
+                </div> 
+                
+                <!--Initial Part Number (Text)-->
+                <div class="form-group col">
+                    <label for="init-parts">No. of Parts</label>
+                    <input type="text" class="form-control" placeholder="ex: 100" id="init-parts">
+                </div>
+            </div>
 
-<!--Initial Part Number (Text)-->
-      <div class="form-group">
-        <label for="init-parts">Initial Part Numbers</label>
-        <input type="text" class="form-control" id="init-parts">
-      </div>
+            <!--Requestor (Text)-->
+            <div class="form-group">
+                <label for="requestor">Requestor(s)</label>
+                <input type="text" class="form-control" placeholder="ex: John Doe" id="requestor">
+            </div>
 
-      <button class="btn btn-primary" id="mainButton">Add</button>
-    </div>
-  </div>
+             <!--Location-->
+             <div class="form-group">
+                 <label for="location">Location</label>
+                 <input type="text" class="form-control" placeholder="ex: CPG" id="location">
+             </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+            <!--Attention-->
+            <div class="form-group">
+                <label for="attn">Attention-to</label>
+                <input type="text" class="form-control" placeholder="ex: Jane Doe" id="attn">
+            </div>
 
-<script> 
+            <!--Ship-to Code (Text)-->
+            <div class="form-group">
+                <label for="shipcode">Ship-to Code</label>
+                <input type="text" class="form-control" placeholder= "ex: 1250" id="shipcode">
+            </div>
 
-//Triggered by 'click' listener
-      function afterButtonClicked(){
-        
-       //Store input values as variables
-        var modelYear = document.getElementById("model-year");
-        var vehicleFamily = document.getElementById("vehicle-family");
-        var eventName = document.getElementById("event-name");
-        var eventType = document.getElementById("event-type");
-        var eventTitle = modelYear.value+vehicleFamily.value+" "+eventName.value+" ("+eventType.value+")";
-        var origMRD = document.getElementById("orig-MRD");
-        var eventStatus = "In-Process";        
-        var programManager = document.getElementById("program-manager");
-        var comments = document.getElementById("commentsH");
-        var initPNs = document.getElementById("init-parts");
+            <!--Ship-to Address-->
+            <div class="form-group">
+                <label for="shipadd">Ship-to Address</label>
+                <input type="text" class="form-control" placeholder= "ex: 12501 Chrysler Dr" id="shipadd">
+            </div>
 
-       //Assemble variables into row data       
-        var rowData = {
-          modelYear: modelYear.value,
-          vehicleFamily: vehicleFamily.value,
-          eventName: eventName.value,
-          eventType:eventType.value,
-          eventTitle,
-          origMRD: origMRD.value,
-          eventStatus,
-          programManager: programManager.value,
-          comments: comments.value,
-          initPNs: initPNs.value          
-        };
-        
-        //Runs addNewRow script first, then afterSubmit script when complete
-        google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
-      }
- 
-//Clear form after row added & format new row
-      function afterSubmit(e){     
+            <button class="btn btn-light btn-block" id="mainButton" disabled>Add New Event</button>
+        </div>
+        </form>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-       //Clear form input fields
-        var modelYear = document.getElementById("model-year");
-        var vehicleFamily = document.getElementById("vehicle-family");
-        var eventName = document.getElementById("event-name");
-        var eventType = document.getElementById("event-type");
-        var origMRD = document.getElementById("orig-MRD");         
-        var programManager = document.getElementById("program-manager");
-        var comments = document.getElementById("commentsH");
-        var initPNs = document.getElementById("init-parts");        
-        modelYear.value="";
-        vehicleFamily.value="";
-        eventName.value="";
-        eventType.value="";
-        origMRD.value="";
-        programManager.value="";   
-        comments.value="";
-        initPNs.value="";
-        
-              
-      
-      
+        <script> 
+            // Validate required entries before allowing the form to be submitted
+            var frm = document.querySelector('form');
+            
+            frm.onchange = function() {
+                var modelYear = document.getElementById("model-year").value;
+                var vehicleFamily = document.getElementById("vehicle-family").value;
+                var eventName = document.getElementById("event-name").value;
+                var origMRD = document.getElementById("orig-MRD").value;
+                var btn = document.querySelector('button');
+                if (modelYear !== "" && vehicleFamily !== "" && eventName !== "" && origMRD !== "") {
+                    btn.disabled = false;
+                    btn.classList.remove('btn-light');
+                    btn.classList.add('btn-primary');
+                } else {
+                    btn.disabled = true;
+                }
+            }
 
-        
-      }
-      
-      function afterSidebarLoads(){
-        google.script.run.withSuccessHandler(afterPMDDAReturned).getProgMgrDDA();
-        google.script.run.withSuccessHandler(afterETDDAReturned).getEventTypeDDA();
-      }
-      
-      
-      function afterPMDDAReturned(arrayOfArrays) {
-        var item = document.getElementById("program-manager");      
-        arrayOfArrays.forEach(function(r){
-          var option = document.createElement("option");
-          option.textContent = r[0];
-          item.appendChild(option);        
-        });     
-      }
+            //Triggered by 'click' listener
+            function afterButtonClicked(){
 
-      function afterETDDAReturned(arrayOfArrays) {
-        var item = document.getElementById("event-type");      
-        arrayOfArrays.forEach(function(r){
-          var option = document.createElement("option");
-          option.textContent = r[0];
-          item.appendChild(option);        
-        });     
-      }
+                //Store input values as variables
+                var modelYear = document.getElementById("model-year");
+                var vehicleFamily = document.getElementById("vehicle-family");
+                var eventName = document.getElementById("event-name");
+                var eventType = document.getElementById("event-type");
+                var eventTitle = modelYear.value + " " + vehicleFamily.value.toUpperCase() + " " + eventName.value;
+                var origMRD = document.getElementById("orig-MRD");
+                var eventStatus = "In-Process";        
+                var programManager = document.getElementById("program-manager");
+                var comments = document.getElementById("commentsH");
+                var initPNs = document.getElementById("init-parts");
+                var requestor = document.getElementById("requestor");
+                var wbs = document.getElementById("wbs");
+                var location = document.getElementById("location");
+                var attn = document.getElementById("attn");
+                var shipcode = document.getElementById("shipcode");
+                var shipadd = document.getElementById("shipadd");
 
-      document.getElementById("mainButton").addEventListener("click",afterButtonClicked);
-      document.addEventListener("DOMContentLoaded",afterSidebarLoads);
-    </script>
+                //Assemble variables into row data       
+                var rowData = {
+                                modelYear: modelYear.value,
+                                vehicleFamily: vehicleFamily.value.toUpperCase(),
+                                eventName: eventName.value,
+                                eventType:eventType.value,
+                                eventTitle,
+                                origMRD: origMRD.value,
+                                eventStatus,
+                                programManager: programManager.value,
+                                comments: comments.value,
+                                initPNs: initPNs.value, 
+                                requestor: requestor.value,
+                                wbs: wbs.value,
+                                location: location.value,
+                                attn: attn.value,
+                                shipcode: shipcode.value,
+                                shipadd: shipadd.value
+                                };
+
+            //Runs addNewRow script first, then afterSubmit script when complete
+                google.script.run.withSuccessHandler(afterSubmit).addNewRow(rowData);
+                              
+                //Create new tracker and format the row
+                //google.script.run.withSuccessHandler(afterSubmit).formatRowCreateTracker();
+                
+                // Close the form
+                //google.script.host.close();
+
+                            
+            }
+
+            //Clear form after row added & format new row
+            function afterSubmit(e){     
+
+                //Clear form input fields
+                var modelYear = document.getElementById("model-year");
+                var vehicleFamily = document.getElementById("vehicle-family");
+                var eventName = document.getElementById("event-name");
+                var eventType = document.getElementById("event-type");
+                var origMRD = document.getElementById("orig-MRD");         
+                var programManager = document.getElementById("program-manager");
+                var comments = document.getElementById("commentsH");
+                var initPNs = document.getElementById("init-parts");   
+                var requestor = document.getElementById("requestor");  
+                var wbs = document.getElementById("wbs");  
+                var location = document.getElementById("location");  
+                var attn = document.getElementById("attn");  
+                var shipcode = document.getElementById("shipcode"); 
+                var shipadd = document.getElementById("shipadd");  
+                modelYear.value="";
+                vehicleFamily.value="";
+                eventName.value="";
+                eventType.value="";
+                origMRD.value="";
+                programManager.value="";   
+                comments.value="";
+                initPNs.value="";
+                requestor.value="";
+                wbs.value="";
+                location.value="";
+                attn.value="";
+                shipcode.value="";
+                shipadd.value="";
+            }
+
+            function afterSidebarLoads(){
+                google.script.run.withSuccessHandler(afterPMDDAReturned).getProgMgrDDA();
+                google.script.run.withSuccessHandler(afterETDDAReturned).getEventTypeDDA();
+            }
 
 
-</body>
+            function afterPMDDAReturned(arrayOfArrays) {
+                var item = document.getElementById("program-manager");      
+                arrayOfArrays.forEach(function(r){
+                var option = document.createElement("option");
+                option.textContent = r[0];
+                item.appendChild(option);        
+            });     
+            }
+
+            function afterETDDAReturned(arrayOfArrays) {
+                var item = document.getElementById("event-type");      
+                arrayOfArrays.forEach(function(r){
+                var option = document.createElement("option");
+                option.textContent = r[0];
+                item.appendChild(option);        
+                });     
+            }
+
+            document.getElementById("mainButton").addEventListener("click",afterButtonClicked);
+            document.addEventListener("DOMContentLoaded",afterSidebarLoads);
+        </script>
+    </body>
 </html>
