@@ -68,19 +68,19 @@ function getHeaderRow(sheet, searchKey) {
 
 function getColIndex(EventSheet, headerRow) {
   
-  //var EventSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Events");
   var lr = EventSheet.getRange("A1").getDataRegion().getLastRow();
   var lc = EventSheet.getLastColumn();
   var headerSearchRange = EventSheet.getRange(1, 1, 10, lc).getValues();
-  //var headerRow = getHeaderRow(EventSheet, "Event Title");
   var EventsHeader = EventSheet.getRange(headerRow, 1, 1, lc).getValues()[0];
   var colIndices = [];
   
   // Logger.log("Event Headers", EventsHeader);
-  // [Date Added, MY, VF, Event Name, Event Type, Event Title, Earliest MRD, Event Status, 
-  // Program Manager, Requestor, WBS Code, Location of Event, Ship-to Code, Ship-to Address, Attention-to, Notes/ Exceptions List @ MRD, 
-  // Initial Part #s, Actual Part #s, # RFQ, # Reqs, # POs, # complete, Cost, % Reqs, % POs, % Complete, 
-  // # Parts On Time, # Parts on Exception, # Parts Late, Timing Status Not Defined, Tracker URL]
+  // [VF, MY, Event Name, Event Type, Event Title, Earliest MRD, Event Status, 
+  // Program Manager, Requestor, WBS Code, Location of Event, Ship-to Code, Ship-to Address, 
+  // Attention-to, Notes, Total # of Parts, % REQ, % PO, % Received, Cost, % Cancelled, 
+  // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, # On Time, # Exception, # Late, # Not Defined, 
+  // % On Time, % Exception, % Late, % Not Defined, #in RFQ Pending, #in REQ, #in PO, #in Rec'd, 
+  // Date Added, Initial Part #s, Tracker URL]
   
   var VFInd = colIndices.push(EventsHeader.indexOf("VF"));
   var EventTitleInd = colIndices.push(EventsHeader.indexOf("Event Title"));
@@ -93,10 +93,11 @@ function getColIndex(EventSheet, headerRow) {
   var ShiptoColInd = colIndices.push(EventsHeader.indexOf("Ship-to Code"));
   var ShipAddColInd = colIndices.push(EventsHeader.indexOf("Ship-to Address"));
   var AttnColInd = colIndices.push(EventsHeader.indexOf("Attention-to"));
+  var PartCountInd = colIndices.push(EventsHeader.indexOf("Initial Part #s"));
   var urlColInd = colIndices.push(EventsHeader.indexOf("Tracker URL"));
   
   // Logger.log(colIndices);
-  // [0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 39.0]
+  // [0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 38.0, 39.0]
   
   return colIndices;
   
@@ -111,22 +112,26 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   var TrackerTabColIndices = [];
   
   // Logger.log(TabHeader);
-  // [Event Title, Vehicle Family, Program Manager,	Event Status, Tab, PPPM Engineer, MRD, Days to MRD,
-  // Total # of Parts, % REQ, % PO, % Received, Cost, % Cancelled, 
+  // [VF, Event Title, Tab, Event Title - Tab, Event Status, Program Manager, 
+  // PPPM Engineer, MRD, Days until MRD, Total # of Parts, 
+  // % REQ, % PO, % Received, Cost, % Cancelled, 
   // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
   // # On Time, # Exception, # Late, # Not Defined, 
   // % On Time, % Exception, % Late, % Not Defined, 
-  // #in RFQ Pending, #in REQ, #in PO, #in Rec'd]
+  // #in RFQ Pending, #in REQ, #in PO, #in Rec'd, Tracker URL]
   
+  var VFInd = TrackerTabColIndices.push(TabHeader.indexOf("VF"));
   var EventTitleInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Title"));
-  var PrgMgrInd = TrackerTabColIndices.push(TabHeader.indexOf("Program Manager"));
-  var EventStatusInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Status"));
-  
   var TabInd = TrackerTabColIndices.push(TabHeader.indexOf("Tab"));
+  var TitleTabInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Title - Tab"));
+  var EventStatusInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Status"));
+  var PrgMgrInd = TrackerTabColIndices.push(TabHeader.indexOf("Program Manager"));
+  
   var PPPMEngrInd = TrackerTabColIndices.push(TabHeader.indexOf("PPPM Engineer"));
   var MRDInd = TrackerTabColIndices.push(TabHeader.indexOf("MRD"));
+  var DaystoMRDInd = TrackerTabColIndices.push(TabHeader.indexOf("Days until MRD"));
   var TotalPartsInd = TrackerTabColIndices.push(TabHeader.indexOf("Total # of Parts"));
-  
+    
   var PercREQInd = TrackerTabColIndices.push(TabHeader.indexOf("% REQ"));
   var PercPOInd = TrackerTabColIndices.push(TabHeader.indexOf("% PO"));
   var PercRecdInd = TrackerTabColIndices.push(TabHeader.indexOf("% Received"));
@@ -152,14 +157,12 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   var NoREQInd = TrackerTabColIndices.push(TabHeader.indexOf("#in REQ"));
   var NoPOInd = TrackerTabColIndices.push(TabHeader.indexOf("#in PO"));
   var NoRecdInd = TrackerTabColIndices.push(TabHeader.indexOf("#in Rec'd"));
-  
-  var VFInd = TrackerTabColIndices.push(TabHeader.indexOf("VF"));
-  var DaystoMRDInd = TrackerTabColIndices.push(TabHeader.indexOf("Days until MRD"));
-  
+  var TrackerURLInd = TrackerTabColIndices.push(TabHeader.indexOf("Tracker URL"));
+    
   // Logger.log(TrackerTabColIndices);
-  // [1.0, 4.0, 3.0, 2.0, 5.0, 6.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 0.0, 7.0]
+  // [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 
+  // 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 
+  // 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0]
   return TrackerTabColIndices;
-  
-  
   
 }
