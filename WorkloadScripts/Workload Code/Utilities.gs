@@ -83,6 +83,7 @@ function getColIndex(EventSheet, headerRow) {
   // Date Added, Initial Part #s, Tracker URL]
   
   var VFInd = colIndices.push(EventsHeader.indexOf("VF"));
+  var EventTypeInd = colIndices.push(EventsHeader.indexOf("Event Type"));
   var EventTitleInd = colIndices.push(EventsHeader.indexOf("Event Title"));
   var MRDColInd = colIndices.push(EventsHeader.indexOf("Earliest MRD"));
   var EventStatusColInd = colIndices.push(EventsHeader.indexOf("Event Status"));
@@ -97,7 +98,7 @@ function getColIndex(EventSheet, headerRow) {
   var urlColInd = colIndices.push(EventsHeader.indexOf("Tracker URL"));
   
   // Logger.log(colIndices);
-  // [0.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 38.0, 39.0]
+  // [0.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 38.0, 39.0]
   
   return colIndices;
   
@@ -118,7 +119,7 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
   // # On Time, # Exception, # Late, # Not Defined, 
   // % On Time, % Exception, % Late, % Not Defined, 
-  // #in RFQ Pending, #in REQ, #in PO, #in Rec'd, Tracker URL]
+  // #in RFQ Pending, #in REQ, #in PO, #in Rec'd, Event Type, Tracker URL]
   
   var VFInd = TrackerTabColIndices.push(TabHeader.indexOf("VF"));
   var EventTitleInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Title"));
@@ -157,12 +158,13 @@ function getTrackerTabIndices(TrackerDataTab, headerRow) {
   var NoREQInd = TrackerTabColIndices.push(TabHeader.indexOf("#in REQ"));
   var NoPOInd = TrackerTabColIndices.push(TabHeader.indexOf("#in PO"));
   var NoRecdInd = TrackerTabColIndices.push(TabHeader.indexOf("#in Rec'd"));
+  var EventTypeInd = TrackerTabColIndices.push(TabHeader.indexOf("Event Type"));
   var TrackerURLInd = TrackerTabColIndices.push(TabHeader.indexOf("Tracker URL"));
     
   // Logger.log(TrackerTabColIndices);
   // [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 
   // 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 
-  // 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0]
+  // 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]
   return TrackerTabColIndices;
   
 }
