@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.6.1           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.6.3           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
@@ -19,6 +19,8 @@
 // -----------Event MRD will be used from Event Tab if it is a new tracker        ----- Completed 12/04/2020
 // -----------Bug Fix for 'Add New Event'                                         ----- Completed 12/07/2020
 // -----------Separated 'Archive tracker' function                                ----- Completed 12/10/2020
+// -----------Added 'Event Type' column to Tracker Tab                            ----- Completed 01/14/2020
+// -----------Only update Tracker Tab with "In-Process" events                    ----- Completed 01/21/2020
 
 
 //----------------------Start : Function to update tracker url field in Event Sheet
@@ -52,16 +54,16 @@ function getNewTrackerURL() {
   */
   
   var VFInd = colIndices[0];
-  var EventTitleInd = colIndices[1];
-  var MRDColInd = colIndices[2];
-  var EventStatusColInd = colIndices[3];
-  var RequestorColInd = colIndices[5];
-  var WBSColInd = colIndices[6];
-  var LocColInd = colIndices[7];
-  var ShiptoColInd = colIndices[8];
-  var ShipAddColInd = colIndices[9];
-  var AttnColInd = colIndices[10];
-  var urlColInd = colIndices[12];
+  var EventTitleInd = colIndices[2];
+  var MRDColInd = colIndices[3];
+  var EventStatusColInd = colIndices[4];
+  var RequestorColInd = colIndices[6];
+  var WBSColInd = colIndices[7];
+  var LocColInd = colIndices[8];
+  var ShiptoColInd = colIndices[9];
+  var ShipAddColInd = colIndices[10];
+  var AttnColInd = colIndices[11];
+  var urlColInd = colIndices[13];
   
   for (var i=0; i<dataRange.length; i++) { 
     var VF = dataRange[i][VFInd];
@@ -76,7 +78,8 @@ function getNewTrackerURL() {
     var Attention = dataRange[i][AttnColInd];
     var url = dataRange[i][urlColInd];
     
-    //Logger.log(EventTitle, EventStatus);
+    //Logger.log(VF + ":" + EventTitle + ":" + EventStatus + "-" + url);
+    
     
     if (EventStatus === "In-Process" && url === "") {
       var link = createNewTracker(VF.trim(), EventTitle.trim());
@@ -182,15 +185,15 @@ function pushEventInfo(link, EventTitle, Requestor, WBSCode, Location, Shipto, S
   var EventsHeader = EventSheet.getRange(headerRow, 1, 1, lc).getValues()[0];
   var dataRange = EventSheet.getRange(headerRow+1, 1, lr-headerRow, lc).getDisplayValues();
   
-  var EventTitleInd = colIndices[1];
-  var EventStatusColInd = colIndices[3];
-  var RequestorColInd = colIndices[5];
-  var WBSColInd = colIndices[6];
-  var LocColInd = colIndices[7];
-  var ShiptoColInd = colIndices[8];
-  var ShipAddColInd = colIndices[9];
-  var AttnColInd = colIndices[10];
-  var urlColInd = colIndices[12];
+  var EventTitleInd = colIndices[2];
+  var EventStatusColInd = colIndices[4];
+  var RequestorColInd = colIndices[6];
+  var WBSColInd = colIndices[7];
+  var LocColInd = colIndices[8];
+  var ShiptoColInd = colIndices[9];
+  var ShipAddColInd = colIndices[10];
+  var AttnColInd = colIndices[11];
+  var urlColInd = colIndices[13];
   
   if (link) {
     var SummarySheet = SpreadsheetApp.openByUrl(link).getSheetByName("Summary");
