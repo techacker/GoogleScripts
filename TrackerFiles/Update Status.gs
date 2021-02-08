@@ -67,14 +67,15 @@ function pushEventUpdates() {
   
   // Get col indexes from Events Sheet
   var colIndices = PPPMWorkloadGoogleScript.getColIndex(EventSheet, headerRow);
-  
+
   var VFInd = colIndices[0];
-  var EventTitleInd = colIndices[1];
-  var EventMRDInd = colIndices[2];
-  var EventStatusInd = colIndices[3];
-  var ProgMgrInd = colIndices[4];
-  var PartCountColInd = colIndices[11];
-  var urlColInd = colIndices[12];
+  var EventTypeInd = colIndices[1];
+  var EventTitleInd = colIndices[2];
+  var EventMRDInd = colIndices[3];
+  var EventStatusInd = colIndices[4];
+  var ProgMgrInd = colIndices[5];
+  var PartCountColInd = colIndices[12];
+  var urlColInd = colIndices[13];
   
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, eslr-headerRow, 1).getValues(); 
   
@@ -88,6 +89,7 @@ function pushEventUpdates() {
       
       EventTitle = EventSheet.getRange(i + headerRow+1, EventTitleInd+1, 1, 1).getValue();
       EventMRD = EventSheet.getRange(i + headerRow+1, EventMRDInd+1, 1, 1).getDisplayValue();
+      EventType = EventSheet.getRange(i + headerRow+1, EventTypeInd+1, 1, 1).getValue();
       ProgMgr = EventSheet.getRange(i + headerRow+1, ProgMgrInd+1, 1, 1).getValue();
       EventStatus = EventSheet.getRange(i+ headerRow+1, EventStatusInd+1, 1, 1).getValue();
       VF = EventSheet.getRange(i+ headerRow+1, VFInd+1, 1, 1).getValue();
@@ -109,7 +111,7 @@ function pushEventUpdates() {
       let usefulTabs = eventTabsData.filter(tabName => tabName[0].toUpperCase() !== "MASTER" 
       && tabName[0].toUpperCase() !== "OVERALL EVENT STATUS");
       
-      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, URL, eventInfoData, eventTabsData);
+      PPPMWorkloadGoogleScript.addEventTitles(EventTitle, VF, ProgMgr, EventType, URL, eventInfoData, eventTabsData);
       PPPMWorkloadGoogleScript.updateEventsData(EventTitle, EventMRD, PartCount, eventTabsData);
     }
   }   
