@@ -12,17 +12,18 @@ function updateTrackerTab() {
   var colIndices = getColIndex(EventSheet, headerRow);
   
   var VFInd = colIndices[0];
-  var EventTitleInd = colIndices[1];
-  var EventMRDInd = colIndices[2];
-  var EventStatusInd = colIndices[3];
-  var ProgMgrInd = colIndices[4];
-  var PartCountColInd = colIndices[11];
-  var urlColInd = colIndices[12];
+  var EventTypeInd = colIndices[1];
+  var EventTitleInd = colIndices[2];
+  var EventMRDInd = colIndices[3];
+  var EventStatusInd = colIndices[4];
+  var ProgMgrInd = colIndices[5];
+  var PartCountColInd = colIndices[12];
+  var urlColInd = colIndices[13];
   
   
   var trackerURLArray = EventSheet.getRange(headerRow+1, urlColInd+1, lr-headerRow, 1).getValues();  
   var BasicEventInfo = [];
-  var VF, EventTitle, EventMRD, EventStatus, ProgMgr, PartCount, URL;
+  var VF, EventTitle, EventType, EventMRD, EventStatus, ProgMgr, PartCount, URL;
   var SummarySheet, sslc, sslr, SummaryRange, ssheaderRow, eventTabsData;
   
   // Get the tracker URL from Events Tab
@@ -31,35 +32,37 @@ function updateTrackerTab() {
     if (trackerURLArray[i][0] !== "") {
       VF = EventSheet.getRange(i+ headerRow+1, VFInd+1, 1, 1).getValue();
       EventTitle = EventSheet.getRange(i + headerRow+1, EventTitleInd+1, 1, 1).getValue();
+      EventType = EventSheet.getRange(i + headerRow+1, EventTypeInd+1, 1, 1).getValue();
       EventMRD = EventSheet.getRange(i + headerRow+1, EventMRDInd+1, 1, 1).getDisplayValue();
       EventStatus = EventSheet.getRange(i+ headerRow+1, EventStatusInd+1, 1, 1).getValue();
       ProgMgr = EventSheet.getRange(i + headerRow+1, ProgMgrInd+1, 1, 1).getValue();
       PartCount = EventSheet.getRange(i+ headerRow+1, PartCountColInd+1, 1, 1).getValue();
       URL = trackerURLArray[i][0];
       
-      // Get Information from Event Tracker's Summary Tab
-      
-      SummarySheet = SpreadsheetApp.openByUrl(trackerURLArray[i][0]).getSheetByName("Summary");
-      sslc = SummarySheet.getLastColumn();
-      sslr = SummarySheet.getRange("A1").getDataRegion().getLastRow();
-      SummaryRange = SummarySheet.getRange(1, 1, sslr, sslc).getValues();
-      ssheaderRow = getHeaderRow(SummarySheet, "Tab");
-      
-      // Events Tab Data from trackers file
-      eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
-      var infoCol = 3;
-      var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
-      
-      // Add Events to Tracker Data Tab
-      addEventTitles(EventTitle, VF, ProgMgr, URL, eventInfoData, eventTabsData);
-      // Update Event information in Tracker Data Tab
-      updateEventsData(EventTitle, EventMRD, PartCount, eventTabsData);
+      // Get Information from Event Tracker's Summary Tab only if the event is "In-Process"
+      if (EventStatus === "In-Process") {
+        SummarySheet = SpreadsheetApp.openByUrl(URL).getSheetByName("Summary");
+        sslc = SummarySheet.getLastColumn();
+        sslr = SummarySheet.getRange("A1").getDataRegion().getLastRow();
+        SummaryRange = SummarySheet.getRange(1, 1, sslr, sslc).getValues();
+        ssheaderRow = getHeaderRow(SummarySheet, "Tab");
+        
+        // Events Tab Data from trackers file
+        eventTabsData = SummarySheet.getRange(ssheaderRow+1, 1, sslr-ssheaderRow, sslc).getDisplayValues();
+        var infoCol = 3;
+        var eventInfoData = SummarySheet.getRange(1, infoCol, ssheaderRow-1, 1).getDisplayValues();
+        
+        // Add Events to Tracker Data Tab
+        addEventTitles(EventTitle, VF, ProgMgr, EventType, URL, eventInfoData, eventTabsData);
+        // Update Event information in Tracker Data Tab
+        updateEventsData(EventTitle, EventMRD, PartCount, eventTabsData);
+      } 
     }
   } 
 }
 
 
-function addEventTitles(EventTitle, VehFam, ProgManager, URL, eventInfoData, eventTabsData) {
+function addEventTitles(EventTitle, VehFam, ProgManager, EventType, URL, eventInfoData, eventTabsData) {
   
   //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/"; // Test Workload File
   var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
@@ -91,7 +94,8 @@ function addEventTitles(EventTitle, VehFam, ProgManager, URL, eventInfoData, eve
   var EventStatusCol = TrackerTabColIndices[4];
   var PrgMgrCol = TrackerTabColIndices[5];  
   var DaystoMRDCol = TrackerTabColIndices[8];
-  var TrackerURLCol = TrackerTabColIndices[31];
+  var EventTypeCol = TrackerTabColIndices[31];
+  var TrackerURLCol = TrackerTabColIndices[32];
   
   // Get Event Titles from Workload file
   var TrackerTabEventTitles = [];
@@ -156,6 +160,7 @@ function addEventTitles(EventTitle, VehFam, ProgManager, URL, eventInfoData, eve
     TrackerDataTab.getRange(headerRow+1, EventTileCol+1, tabCount, 1).setValue(EventTitle);
     TrackerDataTab.getRange(headerRow+1, VFCol+1, tabCount, 1).setValue(VehFam);
     TrackerDataTab.getRange(headerRow+1, PrgMgrCol+1, tabCount, 1).setValue(ProgManager);
+    TrackerDataTab.getRange(headerRow+1, EventTypeCol+1, tabCount, 1).setValue(EventType);
     TrackerDataTab.getRange(headerRow+1, TrackerURLCol+1, tabCount, 1).setValue(URL);
     //TrackerDataTab.getRange(headerRow+1, EventStatusCol+1, tabCount, 1).setValue(EventStatus);
   }
@@ -165,6 +170,7 @@ function addEventTitles(EventTitle, VehFam, ProgManager, URL, eventInfoData, eve
     TrackerDataTab.getRange(EventRow, EventTileCol+1, tabCount - eventRowCount, 1).setValue(EventTitle);
     TrackerDataTab.getRange(EventRow, VFCol+1, tabCount - eventRowCount, 1).setValue(VehFam);
     TrackerDataTab.getRange(EventRow, PrgMgrCol+1, tabCount - eventRowCount, 1).setValue(ProgManager);
+    TrackerDataTab.getRange(EventRow, EventTypeCol+1, tabCount - eventRowCount, 1).setValue(EventType);
     TrackerDataTab.getRange(EventRow, TrackerURLCol+1, tabCount - eventRowCount, 1).setValue(URL);
     //TrackerDataTab.getRange(EventRow, EventStatusCol+1, tabCount - eventRowCount, 1).setValue(EventStatus);
   } 
