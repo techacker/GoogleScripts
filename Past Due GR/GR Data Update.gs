@@ -185,12 +185,7 @@ function replaceData_(ssGRFile) {
 }
 
 function compileLog_(GRFile) {
-  
-  //const pastDueGRfileURL = "https://docs.google.com/spreadsheets/d/1cGCxZVipep-2C7MMucJTMHxJz9yJb65MXUJTDTcJmcg/";
-  //const pastDueGRfileURL = "https://docs.google.com/spreadsheets/d/1bU7DqrLSFKRK4UBk53hAWDaCYkvzhL8XzbhEQLMhBPg/"; //Master Code File
-
-  //const GRFile = SpreadsheetApp.openByUrl(pastDueGRfileURL);
-  
+    
   const ssLog = GRFile.getSheetByName("GR Log"); 
   const lrLog = ssLog.getLastRow();
   const lcLog = ssLog.getLastColumn();
@@ -258,8 +253,7 @@ function checkSheets_(GRFile) {
   } else if (!sheetNames.includes("Current")) {
     Browser.msgBox("Sheet named 'Current' is not found!");
     return false
-  } else {
-    return true
   }
+
 }
 
