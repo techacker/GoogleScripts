@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------- PPPM Workload Events Data Update Program --------------------------------------------------------------
 // -------------------------------------------------------------------------      Author: Anurag Bansal        ------------------------------------------------------------------
-// -------------------------------------------------------------------------          Version: 1.6.3           ------------------------------------------------------------------
+// -------------------------------------------------------------------------          Version: 1.7           ------------------------------------------------------------------
 // -------------------------------------------------------------------------      Only for PPPM Programs       ------------------------------------------------------------------
 // -----------Change Log:
 // -----------Create Event Tracker in PPPM Shared Parts Tracker Folder            ----- Completed 09/11/2020
@@ -25,9 +25,9 @@
 
 //----------------------Start : Function to update tracker url field in Event Sheet
 
-function getNewTrackerURL() {
+function getNewTrackerURL(workloadfileURL) {
   
-  var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
+  //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1lwDLj82hJWXi_6r7ec7s7BXSGL2C8MJkdxLkg3OsCUA/";
   //var workloadfileURL = "https://docs.google.com/spreadsheets/d/1TpNZ-fOasSRQN6JJRI9JfqWfgvHhVIi83YYnMDuTVX0/";  // Test PPPM Workload File
   var EventSheet = SpreadsheetApp.openByUrl(workloadfileURL).getSheetByName("Events");
   var lr = EventSheet.getLastRow();
@@ -263,8 +263,8 @@ function archiveTrackers() {
   }
   */
   
-  var EventStatusColInd = colIndices[3];
-  var urlColInd = colIndices[12];
+  var EventStatusColInd = colIndices[4];
+  var urlColInd = colIndices[13];
   
   for (var i=0; i<dataRange.length; i++) { 
     var EventStatus = dataRange[i][EventStatusColInd];
