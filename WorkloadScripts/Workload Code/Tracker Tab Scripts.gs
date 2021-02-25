@@ -201,17 +201,15 @@ function updateEventsData(EventTitle, EventMRD, PartCount, eventTabsData) {
   var TrackerDataTabRange = TrackerDataTab.getRange(headerRow+1, 1, lr, lc).getDisplayValues();
   
   // Logger.log(TrackerTabColIndices)
-  // [VF, Event Title, Tab, Event Title - Tab, Event Status, Program Manager, 
-  // PPPM Engineer, MRD, Days until MRD, Total # of Parts, 
-  // % REQ, % PO, % Received, Cost, % Cancelled, 
-  // # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, 
-  // # On Time, # Exception, # Late, # Not Defined, 
-  // % On Time, % Exception, % Late, % Not Defined, 
-  // #in RFQ Pending, #in REQ, #in PO, #in Rec'd
-  
-  // [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 
+  // [VF, Event Title, Tab, Event Title - Tab, Event Status, Program Manager, PPPM Engineer, MRD, Days until MRD, Total # of Parts, % REQ,
+  // % PO, % Received, Cost, % Cancelled, # REQ Submitted, # PO Issued, # Parts Received, # Cancelled, # On Time, # Exception,
+  // # Late, # Not Defined. % On Time, % Exception, % Late, % Not Defined, #in RFQ Pending, #in REQ, #in PO, #in Rec'd,
+  // Event Type, Tracker URL]
+
+  //[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 
   // 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 
-  // 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0]
+  // 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 
+  // 31.0, 32.0]
   
   var VFInd = TrackerTabColIndices[0];
   var EventTileCol = TrackerTabColIndices[1];
