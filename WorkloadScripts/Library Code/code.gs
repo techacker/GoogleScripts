@@ -1,13 +1,10 @@
-function createNewEventsTracker() {
-  PPPMWorkloadGS.getNewTrackerURL();
+function onOpen(){
+  PPPMWorkloadGS.createMenu();   
 }
 
-
-function getNewTrackerURL() {
-  PPPMWorkloadGS.getNewTrackerURL();
+function createTracker() {
+  PPPMWorkloadGS.createTracker();
 }
-
-
 function updateTrackerTab() {
   PPPMWorkloadGS.updateTrackerTab();
 }
