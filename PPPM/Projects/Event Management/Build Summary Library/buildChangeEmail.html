@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body style="font-family: sans-serif">
+    <p>PBE team,</p>
+    <p></p>
+    <p>Following revisions were made to the build: <b><?= buildTitle ?></b></p>
+    <p></p>
+    <table style="table-layout: fixed; width: 440px; border-collapse: collapse; border: 1px solid gray">
+      <thead style="font-weight:bold; background-color: RoyalBlue; color: white; text-align: center; padding: 5px">
+        <tr style="padding: 10px">
+          <td style="border: 1px solid gray">What Changed</td>
+          <td style="border: 1px solid gray">From</td>
+          <td style="border: 1px solid gray">To</td>
+        </tr>
+      </thead>
+      <tbody>
+        <? changeBulletinArray.forEach(r => { ?>
+        <tr style="text-align: center; padding: 5px">
+          <td style="font-weight: bold; border: 1px solid gray"><b><?= r[0] ?></b></td>
+          <td style="border: 1px solid gray"><?= r[1] ?></td>
+          <td style="border: 1px solid gray"><?= r[2] ?></td>
+        </tr>
+        <? }) ?>
+        <tr style="padding: 5px">
+          <td style="text-align: center; font-weight: bold; border: 1px solid gray"><b>Build Tracker URL</b></td>
+          <td colspan="2" style="text-align: center"><?= buildTrackerURL ?></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Please let me know if there are any questions or concerns.</p>
+    <p>Best Regards,</p>  
+  </body>
+</html>
